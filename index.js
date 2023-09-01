@@ -30,14 +30,14 @@ app.get('/', (req, res) => {
   app.get('/users', (req, res) => {
     res.send('USERS LIST');
   });
-  const connectDB = async ()=>{
-    try {
-      await db.connect()
+  // const connectDB = async ()=>{
+  //   try {
+  //     await db.connect()
    
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
   // db.query('SELECT * FROM users', (error, result) => {
   //   if (error) {
   //     console.error('Error executing query', error);
