@@ -13,8 +13,9 @@ const msgRouter = require('./routes/sendMessage.js')
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(express.json());
-app.use(cors());
 app.use(express.static('public'));
+app.use(cors());
+
 
 
 
@@ -58,16 +59,14 @@ app.get('/', (req, res) => {
   //   }
   // })
 
-  // db.query(`insert into users (name,surname,tel,email,password)
-  // values ('Роман','Татарин','+380989578520','tatarynrm@gmail.com','Aa527465182')
-  // returning *;
-  // `, (error,result) =>{
-  //   if (error) {
-  //     console.error('Error executing query', error);
-  //   } else {
-  //     console.log('Query result:', result.rows);
-  //   }
-  // })
+  db.query(`select a.name,b.company_code from public.user a join company b on a.company_id = 1;
+  `, (error,result) =>{
+    if (error) {
+      console.error('Error executing query', error);
+    } else {
+      console.log('Query result:', result.rows);
+    }
+  })
 
 
 
