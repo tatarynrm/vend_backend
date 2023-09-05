@@ -4,8 +4,8 @@ const login = async(req,res) =>{
     const {email,password} = req.body;
  
     try {
-        const result = await db.query(`select * from users where email = '${email}' and password = '${password}'`)
-      
+        const result = await db.query(`select * from public.user where email = '${email}' and password = '${password}'`)
+      console.log(result);
     if (result.rows.length > 0) {
         const token = jwt.sign(
             {

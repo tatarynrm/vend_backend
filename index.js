@@ -7,6 +7,7 @@ const port = 8800; // Port number you want to use
 const db = require('./db/db')
 const cors = require("cors");
 const authRouter = require("./routes/auth");
+const msgRouter = require('./routes/sendMessage.js')
 
 
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
@@ -18,6 +19,7 @@ app.use(express.static('public'));
 
 
 app.use("/auth", authRouter);
+app.use("/msg", msgRouter);
 
 app.get('/', (req, res) => {
     res.send('Hello, VENDMARKET!');
