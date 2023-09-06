@@ -8,6 +8,8 @@ const db = require('./db/db')
 const cors = require("cors");
 const authRouter = require("./routes/auth");
 const msgRouter = require('./routes/sendMessage.js')
+const userRouter = require('./routes/user')
+const clientRouter = require('./routes/client')
 
 
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
@@ -21,6 +23,8 @@ app.use(cors());
 
 app.use("/auth", authRouter);
 app.use("/msg", msgRouter);
+app.use("/user", userRouter);
+app.use("/client", clientRouter);
 
 app.get('/', (req, res) => {
     res.send('Hello, VENDMARKET!');
