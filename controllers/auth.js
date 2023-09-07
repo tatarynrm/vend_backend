@@ -5,7 +5,7 @@ const login = async(req,res) =>{
  
     try {
         const result = await db.query(`select * from public.user where email = '${email}' and password = '${password}'`)
-      console.log(result.rows);
+
     if (result.rows.length > 0) {
         const token = jwt.sign(
             {
@@ -31,7 +31,7 @@ const getMe = async (req,res)=>{
     // console.log(req);
     try {
         const result = await db.query(`select * from public.user where email = '${req.userId}'`)
-        console.log(result.rows);
+   
         res.status(200).json({...result.rows[0]})
     } catch (error) {
         console.log(error);

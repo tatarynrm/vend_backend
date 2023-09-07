@@ -63,14 +63,14 @@ app.get('/', (req, res) => {
   //   }
   // })
 
-  db.query(`select a.name,b.company_code from public.user a join company b on a.company_id = 1;
-  `, (error,result) =>{
-    if (error) {
-      console.error('Error executing query', error);
-    } else {
-      console.log('Query result:', result.rows);
-    }
-  })
+  // db.query(`select a.name,b.company_code from public.user a join company b on a.company_id = 1;
+  // `, (error,result) =>{
+  //   if (error) {
+  //     console.error('Error executing query', error);
+  //   } else {
+  //     console.log('Query result:', result.rows);
+  //   }
+  // })
 
 
 
