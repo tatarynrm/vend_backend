@@ -38,14 +38,14 @@ const createNewMachine = async (req, res) => {
     machine_pin,
   } = req.body;
   console.log(req.body);
+  console.log(address);
   const client = await db.connect();
   try {
-    
     const machine = await client.query(
       `select * from water_machine where machine_id = ${machine_id}`
     );
 
-    console.log(machine.rows);
+    // console.log(machine.rows);
     if (machine.rows[0]) {
       res.status(201).json({
         message: "User already exist",
@@ -54,7 +54,11 @@ const createNewMachine = async (req, res) => {
       const newMachine = await client.query(
         `
          INSERT INTO water_machine (machine_id,address,company_id,machine_phone,terminal_sim,machine_pin)
-         values (${+ machine_id},'${address}',${+ company_id},${ + machine_phone},${+ terminal_sim},${+ machine_pin})
+         values (${+ machine_id },'${address}',${
+          company_id ? company_id : null
+        },${machine_phone ? machine_phone : null},${
+          terminal_sim ? +terminal_sim : null
+        },${machine_pin ? +machine_pin : null})
          `
       );
       console.log(newMachine);
@@ -67,5 +71,5 @@ const createNewMachine = async (req, res) => {
 module.exports = {
   getMyMachine,
   getAllMachines,
-  createNewMachine
+  createNewMachine,
 };
