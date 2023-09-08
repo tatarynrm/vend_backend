@@ -28,7 +28,7 @@ app.use("/msg", msgRouter);
 app.use("/user", userRouter);
 app.use("/client", clientRouter);
 app.use("/machine", machineRouter);
-app.use("/company", companyRouter);
+app.use("/client", companyRouter);
 
 app.get('/', (req, res) => {
     res.send('Hello, VENDMARKET!');

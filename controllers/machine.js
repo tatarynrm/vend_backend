@@ -16,7 +16,8 @@ const getMyMachine = async (req, res) => {
 // ADMIN
 const getAllMachines = async (req, res) => {
   try {
-    const result = await db.query(`select * from water_machine`);
+    // const result = await db.query(`select * from water_machine`);
+    const result = await db.query(`select * from water_machine a full outer join company b on a.company_id = b.id`);
    
    console.log(result.rows);
     res.status(200).json(result.rows);
