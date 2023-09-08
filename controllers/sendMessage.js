@@ -14,9 +14,9 @@ try {
     };
     
     // const data = {
-    //   content: 'pin=1111;addlits=6;',
+    //   content: 'pin=1111;addlits=1;',
     //   type: 'SMS',
-    //   receiver: [{ id: 443, phoneNumber: 380934884189 }],
+    //   receiver: [{ id: 443, phoneNumber: 380672018231 }],
     //   sender: { id: 'Vend Water' },
     //   characteristic: [
     //     { name: 'DISTRIBUTION.ID', value: 5029972 },
