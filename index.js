@@ -10,6 +10,7 @@ const authRouter = require("./routes/auth");
 const msgRouter = require('./routes/sendMessage.js')
 const userRouter = require('./routes/user')
 const clientRouter = require('./routes/client')
+const machineRouter = require('./routes/machine')
 
 
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
@@ -25,6 +26,7 @@ app.use("/auth", authRouter);
 app.use("/msg", msgRouter);
 app.use("/user", userRouter);
 app.use("/client", clientRouter);
+app.use("/machine", machineRouter);
 
 app.get('/', (req, res) => {
     res.send('Hello, VENDMARKET!');
