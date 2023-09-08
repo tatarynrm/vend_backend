@@ -11,6 +11,7 @@ const msgRouter = require('./routes/sendMessage.js')
 const userRouter = require('./routes/user')
 const clientRouter = require('./routes/client')
 const machineRouter = require('./routes/machine')
+const companyRouter = require('./routes/company')
 
 
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
@@ -27,6 +28,7 @@ app.use("/msg", msgRouter);
 app.use("/user", userRouter);
 app.use("/client", clientRouter);
 app.use("/machine", machineRouter);
+app.use("/company", companyRouter);
 
 app.get('/', (req, res) => {
     res.send('Hello, VENDMARKET!');
@@ -47,7 +49,7 @@ app.get('/', (req, res) => {
   //     console.log(error);
   //   }
   // }
-  // db.query('SELECT * FROM users', (error, result) => {
+  // db.query('SELECT * FROM public.user a full outer join company b on a.company_id = b.id ', (error, result) => {
   //   if (error) {
   //     console.error('Error executing query', error);
   //   } else {
