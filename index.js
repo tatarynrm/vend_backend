@@ -11,6 +11,7 @@ const userRouter = require("./routes/user");
 const clientRouter = require("./routes/client");
 const machineRouter = require("./routes/machine");
 const companyRouter = require("./routes/company");
+const smsRouter = require('./routes/smsStatus')
 
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
@@ -24,6 +25,7 @@ app.use("/user", userRouter);
 app.use("/client", clientRouter);
 app.use("/machine", machineRouter);
 app.use("/client", companyRouter);
+app.use("/sms", smsRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello, VENDMARKET!");
