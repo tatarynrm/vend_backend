@@ -192,7 +192,7 @@ const sendCollectCash = async (req, res) => {
         Authorization: `bearer ${token.data.access_token}`,
       };
       const data1 = {
-        content: `pin=${+data.smsInfo.machine_pin};reboot;`,
+        content: `pin=${+data.smsInfo.machine_pin};collect;`,
         type: "SMS",
         receiver: [
           { id: +data.smsInfo.id, phoneNumber: +data.smsInfo.machine_phone },
