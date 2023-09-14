@@ -38,8 +38,7 @@ const createNewMachine = async (req, res) => {
     terminal_sim,
     machine_pin,
   } = req.body;
-  console.log(req.body);
-  console.log(address);
+
   const client = await db.connect();
   try {
     const machine = await client.query(
@@ -55,7 +54,7 @@ const createNewMachine = async (req, res) => {
       const newMachine = await client.query(
         `
          INSERT INTO water_machine (machine_id,address,company_id,machine_phone,terminal_sim,machine_pin)
-         values (${+ machine_id },'${address}',${
+         values (${+machine_id},'${address}',${
           company_id ? company_id : null
         },${machine_phone ? machine_phone : null},${
           terminal_sim ? +terminal_sim : null
@@ -69,8 +68,47 @@ const createNewMachine = async (req, res) => {
     console.log(error);
   }
 };
+const editMachine = async (req, res) => {
+  const { machine_id, address, machine_phone, terminal_sim, machine_pin } =
+    req.body;
+  console.log(terminal_sim);
+  try {
+    const client = await db.connect();
+    const result = await client.query(
+      `update water_machine set machine_id =${+machine_id},address ='${address}',
+      machine_phone ='${machine_phone}',terminal_sim = '${
+        terminal_sim !== null ? terminal_sim : 0
+      }',machine_pin = ${+machine_pin} where machine_id =${+machine_id}
+      `
+    );
+    res.status(200).json({
+      msg: "Success",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+const deleteMachine = async (req, res) => {
+  const { id } =
+    req.body;
+
+  try {
+    const client = await db.connect();
+    const result = await client.query(
+      `delete from water_machine where machine_id = ${+id}
+      `
+    );
+    res.status(200).json({
+      msg: "Success",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 module.exports = {
   getMyMachine,
   getAllMachines,
   createNewMachine,
+  editMachine,
+  deleteMachine
 };

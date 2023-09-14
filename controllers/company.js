@@ -3,7 +3,7 @@ const db = require("../db/db");
 
 // ADMIN
 const getAllCompanies = async (req, res) => {
-  console.log('company','dsada');
+  console.log("company", "dsada");
   try {
     const company = await db.query(`select * from company`);
     // console.log(users);
@@ -48,7 +48,36 @@ const createCompany = async (req, res) => {
     console.log(error);
   }
 };
+const editCompany = async (req, res) => {
+  const {
+    company_name,
+    director_name,
+    director_surname,
+    director_last_surname,
+    company_code,
+    legal_address,
+    phone_number,
+    id,
+  } = req.body;
+  console.log(company_code);
+
+  try {
+    const client = await db.connect();
+    const update = client.query(`
+  update company set company_name = '${company_name}',director_name = '${director_name}',
+  director_surname = '${director_surname}',director_last_surname ='${director_last_surname}',
+  company_code = ${+company_code},legal_address = '${legal_address}',
+  phone_number = ${+phone_number} where id = ${+id}
+`);
+    res.status(200).json({
+      msg: "Success",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 module.exports = {
   getAllCompanies,
-  createCompany
+  createCompany,
+  editCompany,
 };
