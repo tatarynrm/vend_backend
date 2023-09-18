@@ -6,7 +6,7 @@ const getAllUsers = async (req, res) => {
     const users = await db.query(
       `select a.* from public.user a full outer join company b on a.company_id = b.id `
     );
-    console.log(users.rows);
+
     res.status(200).json(users.rows);
   } catch (error) {
     console.log(error);
@@ -17,9 +17,9 @@ const getAllUsers = async (req, res) => {
 const createNewUser = async (req, res) => {
   const { name, surname, last_surname, email, password, tel, company_id } =
     req.body;
-  const client = await db.connect();
+
   try {
-    const user = await client.query(
+    const user = await db.query(
       `select * from public.user where email = '${email}'`
     );
 
@@ -29,13 +29,13 @@ const createNewUser = async (req, res) => {
         message: "User already exist",
       });
     } else {
-      const newUser = await client.query(
+      const newUser = await db.query(
         `
         INSERT INTO public.user (name,surname,last_surname,email,password,tel,company_id)
         values ('${name}','${surname}','${last_surname}','${email}','${password}','${tel}','${company_id}')
         `
       );
-      console.log(newUser);
+   
       res.status(200).json(newUser.command);
     }
   } catch (error) {
@@ -47,9 +47,9 @@ const createNewUser = async (req, res) => {
 const userUpdate = async (req, res) => {
   const { id, name, surname, last_surname, email, password, tel } = req.body;
   console.log(id);
-  const client = await db.connect();
+
   try {
-    const user = await client.query(
+    const user = await db.query(
       `update public.user set name ='${name}',surname = '${surname}', last_surname='${last_surname}', password ='${password}',email='${email}',tel='${tel}'  where id = '${+id}'`
     );
     res.status(200).json({
@@ -63,9 +63,9 @@ const userDelete = async (req, res) => {
   const { id } = req.body;
   console.log(id);
 
-  const client = await db.connect();
+
   try {
-    const user = await client.query(
+    const user = await db.query(
       `delete from public.user where id =${id}`
     );
     res.status(200).json({

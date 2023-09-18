@@ -243,8 +243,7 @@ const sendCollectCash = async (req, res) => {
 };
 const sendPriceForLitr = async (req, res) => {
   const { data } = req.body;
-  console.log('data',data);
-  console.log(data.priceForLiter);
+
   try {
     const queryParams = {
       grant_type: "password",
