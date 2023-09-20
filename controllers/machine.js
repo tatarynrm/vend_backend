@@ -2,10 +2,10 @@ const db = require("../db/db");
 
 const getMyMachine = async (req, res) => {
   const { company_id } = req.body;
-
+console.log(company_id);
   try {
     const result = await db.query(
-      `select * from water_machine where company_id = ${company_id}`
+      `select * from water_machine where company_id =${+company_id}`
     );
     res.status(200).json(result.rows);
   } catch (error) {
