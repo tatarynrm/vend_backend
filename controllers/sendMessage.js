@@ -485,7 +485,7 @@ const changePin = async (req, res) => {
 };
 const changeNumber = async (req, res) => {
   const { data } = req.body;
-console.log('DATA!!!!!!!!',data);
+  console.log("DATA!!!!!!!!", data);
   try {
     const queryParams = {
       grant_type: "password",
@@ -514,8 +514,8 @@ console.log('DATA!!!!!!!!',data);
         Authorization: `bearer ${token.data.access_token}`,
       };
       const data1 = {
-      
-        content: `pin=${+data.smsInfo.machine_pin};settelnum:1=${+data.newNumber};`,
+        content: `pin=${+data.smsInfo
+          .machine_pin};settelnum:1=${+data.newNumber};`,
         type: "SMS",
         receiver: [
           { id: +data.smsInfo.id, phoneNumber: +data.smsInfo.machine_phone },
@@ -549,9 +549,8 @@ console.log('DATA!!!!!!!!',data);
             }
           );
           res.status(200).json(response.data);
-          console.log(data);
           db.query(
-            `update  water_machine set machine_phone = ${+data.smsInfo.machine_phone}
+            `update water_machine set machine_phone = ${+data.newNumber}
              where machine_id =${+data.smsInfo.machine_id}
             `
           );
@@ -571,7 +570,90 @@ console.log('DATA!!!!!!!!',data);
 };
 const changeToken = async (req, res) => {
   const { data } = req.body;
+  console.log('DATA!!!!!!!!!!',data);
+  try {
+    const queryParams = {
+      grant_type: "password",
+      username: 380675576609,
+      password: "!0250910zXcDanil",
+    };
+    const headers = {
+      Authorization: "Basic aW50ZXJuYWw6aW50ZXJuYWw=",
+    };
+    const token = await axios.post(
+      "https://a2p.vodafone.ua/uaa/oauth/token",
+      null,
+      {
+        params: queryParams,
+        headers: headers,
+      }
+    );
 
+    if (token && data) {
+      const url =
+        "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v2/communicationMessage/send";
+
+      const headers = {
+        "Content-Type": "application/json",
+        Accept: "*/*",
+        Authorization: `bearer ${token.data.access_token}`,
+      };
+      const data1 = {
+        content: `pin=${+data.smsInfo.machine_pin};settok=${data.newToken};`,
+        type: "SMS",
+        receiver: [
+          { id: +data.smsInfo.id, phoneNumber: +data.smsInfo.machine_phone },
+        ],
+        sender: { id: "Vend Water" },
+        characteristic: [
+          { name: "DISTRIBUTION.ID", value: 5029972 },
+          { name: "VALIDITY.PERIOD", value: "000000000100000R" },
+        ],
+      };
+
+      const sendLitersData = await axios({
+        method: "post",
+        url: url,
+        headers: headers,
+        data: data1,
+      })
+        .then((response) => {
+          db.query(
+            `
+                     INSERT INTO sms_status (company_id,status,status_id,status_name)
+                     values (${+data.userData
+                       .company_id},'${"ACCEPTED"}',${8},'${"Встановити токен"}')
+                     `,
+            (error, result) => {
+              if (error) {
+                console.error("Error executing query", error);
+              } else {
+                console.log("Query result:", result.rows);
+              }
+            }
+          );
+          res.status(200).json(response.data);
+          db.query(
+            `update water_machine set machine_token = '${data.newToken}' where machine_id = ${+data.smsInfo.machine_id}
+            `
+          );
+
+          console.log("Response:-------", response.data);
+        })
+        .catch((error) => {
+          console.error("Error:", error.message);
+        });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      error: error,
+    });
+  }
+};
+const changeAddress = async (req, res) => {
+  const { data } = req.body;
+console.log(data);
   try {
     const queryParams = {
       grant_type: "password",
@@ -636,7 +718,7 @@ const changeToken = async (req, res) => {
           res.status(200).json(response.data);
           console.log(data);
           db.query(
-            `update  water_machine set machine_phone = ${+data.machine_phone}
+            `update  water_machine set machine_address = ${+data.newAnthillAddress}
              where machine_id =${+data.smsInfo.machine_id}
             `
           );
@@ -663,5 +745,6 @@ module.exports = {
   sendGetInfo,
   changePin,
   changeNumber,
-  changeToken
+  changeToken,
+  changeAddress,
 };
