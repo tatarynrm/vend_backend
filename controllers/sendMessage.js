@@ -682,7 +682,7 @@ console.log(data);
         Authorization: `bearer ${token.data.access_token}`,
       };
       const data1 = {
-        content: `pin=${+data.smsInfo.machine_pin};setpin=${+data.pin};`,
+        content: `pin=${+data.smsInfo.machine_pin};setantaddr=${data.newAnthillAddress};`,
         type: "SMS",
         receiver: [
           { id: +data.smsInfo.id, phoneNumber: +data.smsInfo.machine_phone },
@@ -705,7 +705,7 @@ console.log(data);
             `
                      INSERT INTO sms_status (company_id,status,status_id,status_name)
                      values (${+data.userData
-                       .company_id},'${"ACCEPTED"}',${8},'${"Заміна номера модуля"}')
+                       .company_id},'${"ACCEPTED"}',${9},'${"Заміна ADR"}')
                      `,
             (error, result) => {
               if (error) {
