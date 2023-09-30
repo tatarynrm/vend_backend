@@ -11,6 +11,7 @@ const {
   changeNumber,
   changeToken,
   changeAddress,
+  changeServiceNumber,
 } = require("../controllers/sendMessage");
 
 const router = express.Router();
@@ -23,4 +24,5 @@ router.route("/change-pin").post(changePin);
 router.route("/change-number").post(changeNumber);
 router.route("/change-token").post(changeToken);
 router.route("/change-address").post(changeAddress);
+router.route("/change-service-number").post(changeServiceNumber);
 module.exports = router;
