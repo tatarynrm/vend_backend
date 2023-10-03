@@ -21,7 +21,7 @@ const getAllMachines = async (req, res) => {
       `select * from water_machine a full outer join company b on a.company_id = b.id`
     );
 
-    console.log(result.rows);
+  
     res.status(200).json(result.rows);
   } catch (error) {
     console.log(error);
@@ -68,11 +68,11 @@ const createNewMachine = async (req, res) => {
   }
 };
 const editMachine = async (req, res) => {
-  const { machine_id, address, machine_phone, terminal_sim, machine_pin } =
+  const { machine_id, address, machine_phone, terminal_sim, machine_pin, company_id} =
     req.body;
-  console.log(terminal_sim);
+    console.log(company_id);
   try {
-  
+  if (company_id === undefined) {
     const result = await db.query(
       `update water_machine set machine_id =${+machine_id},address ='${address}',
       machine_phone ='${machine_phone}',terminal_sim = '${
@@ -83,6 +83,21 @@ const editMachine = async (req, res) => {
     res.status(200).json({
       msg: "Success",
     });
+  }else {
+    const result = await db.query(
+      `update water_machine set machine_id =${+machine_id},address ='${address}',
+      machine_phone ='${machine_phone}',terminal_sim = '${
+        terminal_sim !== null ? terminal_sim : 0
+      }',machine_pin = ${+machine_pin},company_id=${+company_id} where machine_id =${+machine_id}
+      `
+    );
+    res.status(200).json({
+      msg: "Success",
+    });
+  }
+
+    
+
   } catch (error) {
     console.log(error);
   }
