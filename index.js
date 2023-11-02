@@ -61,12 +61,12 @@ blockUserBeforePay();
 
 // const publicKey = "sandbox_i31110430124";
 // const privateKey = "sandbox_HJjraXMdCLnz3ApcEJOYCjmSgRjhsjtuvFSVmVci";
-
+const publicKey = 'sandbox_i31110430124';
+const privateKey = 'sandbox_HJjraXMdCLnz3ApcEJOYCjmSgRjhsjtuvFSVmVci';
 // // Endpoint to initiate a payment
 app.post("/initiate-payment", async (req, res) => {
   try {
-    const publicKey = 'sandbox_i31110430124';
-    const privateKey = 'sandbox_HJjraXMdCLnz3ApcEJOYCjmSgRjhsjtuvFSVmVci';
+ 
     var LiqPay = require('./my_modules/liqpay.js');
     var liqpay = new LiqPay(publicKey, privateKey);
     var html = liqpay.cnb_form({
