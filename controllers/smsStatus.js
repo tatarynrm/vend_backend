@@ -60,6 +60,7 @@ const getSmsByDateAndCompany = async (req, res) => {
     console.log(error);
   }
 };
+
 module.exports = {
   getAllTodaySms,
   getSmsByDate,

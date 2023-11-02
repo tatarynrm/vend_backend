@@ -654,7 +654,6 @@ const changeToken = async (req, res) => {
 };
 const changeAddress = async (req, res) => {
   const { data } = req.body;
-console.log(data);
   try {
     const queryParams = {
       grant_type: "password",

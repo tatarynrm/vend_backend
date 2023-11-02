@@ -35,7 +35,7 @@ const createNewUser = async (req, res) => {
         values ('${name}','${surname}','${last_surname}','${email}','${password}','${tel}','${company_id}')
         `
       );
-   
+
       res.status(200).json(newUser.command);
     }
   } catch (error) {
@@ -63,14 +63,34 @@ const userDelete = async (req, res) => {
   const { id } = req.body;
   console.log(id);
 
-
   try {
-    const user = await db.query(
-      `delete from public.user where id =${id}`
-    );
+    const user = await db.query(`delete from public.user where id =${id}`);
     res.status(200).json({
       msg: "Success",
     });
+  } catch (error) {
+    console.log(error);
+  }
+};
+const cancelActiveFalse = async (req, res) => {
+  const { id } = req.body;
+  try {
+      const updateQuery = {
+        text: "UPDATE public.user SET active = $1  WHERE  id = $2",
+        values: [1,id], // Replace with your new values and the target row's identifier
+      };
+
+      db.query(updateQuery)
+        .then((result) => {
+          console.log("Update successful");
+          res.json({
+            msg:"success"
+          })
+        })
+        .catch((error) => {
+          console.error("Error executing update query", error);
+        });
+
   } catch (error) {
     console.log(error);
   }
@@ -79,5 +99,6 @@ module.exports = {
   getAllUsers,
   createNewUser,
   userUpdate,
-  userDelete
+  userDelete,
+  cancelActiveFalse,
 };

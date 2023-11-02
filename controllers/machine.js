@@ -107,7 +107,6 @@ const deleteMachine = async (req, res) => {
     req.body;
 
   try {
-
     const result = await db.query(
       `delete from water_machine where machine_id = ${+id}
       `
@@ -119,10 +118,27 @@ const deleteMachine = async (req, res) => {
     console.log(error);
   }
 };
+const changeAddress = async (req, res) => {
+  const { id,address } = req.body;
+  console.log(req.body);
+try {
+
+  const result = await db.query(
+    `update water_machine set address ='${address}' where id =${+id}
+    `
+  );
+ res.json({
+  msg:"ok"
+ })
+} catch (error) {
+  console.log(error);
+}
+};
 module.exports = {
   getMyMachine,
   getAllMachines,
   createNewMachine,
   editMachine,
-  deleteMachine
+  deleteMachine,
+  changeAddress
 };
