@@ -11,7 +11,7 @@ const getAllTodaySms = async (req, res) => {
         WHERE DATE(a.created_at) >= current_date
         LIMIT 100
       `);
-    console.log(result);
+  
     res.status(200).json(result.rows);
   } catch (error) {
     console.log(error);
@@ -44,7 +44,7 @@ const getSmsByDate = async (req, res) => {
 };
 const getSmsByDateAndCompany = async (req, res) => {
   const { dateFrom, dateTo,company_id } = req.body;
-  console.log(company_id);
+
   try {
     if ((dateFrom !== "") & (dateTo !== "")) {
       const result = await db.query(`

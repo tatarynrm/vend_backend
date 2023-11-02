@@ -70,7 +70,7 @@ const createNewMachine = async (req, res) => {
 const editMachine = async (req, res) => {
   const { machine_id, address, machine_phone, terminal_sim, machine_pin, company_id} =
     req.body;
-    console.log(company_id);
+   
   try {
   if (company_id === undefined) {
     const result = await db.query(
@@ -120,7 +120,7 @@ const deleteMachine = async (req, res) => {
 };
 const changeAddress = async (req, res) => {
   const { id,address } = req.body;
-  console.log(req.body);
+  // console.log(req.body);
 try {
 
   const result = await db.query(

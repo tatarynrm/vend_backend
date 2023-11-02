@@ -46,7 +46,7 @@ const createNewUser = async (req, res) => {
 
 const userUpdate = async (req, res) => {
   const { id, name, surname, last_surname, email, password, tel } = req.body;
-  console.log(id);
+
 
   try {
     const user = await db.query(
@@ -61,7 +61,7 @@ const userUpdate = async (req, res) => {
 };
 const userDelete = async (req, res) => {
   const { id } = req.body;
-  console.log(id);
+
 
   try {
     const user = await db.query(`delete from public.user where id =${id}`);
