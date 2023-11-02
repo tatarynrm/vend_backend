@@ -59,108 +59,72 @@ const blockUserBeforePay = async () => {
 };
 blockUserBeforePay();
 
-const publicKey = 'sandbox_i31110430124';
-const privateKey = 'sandbox_HJjraXMdCLnz3ApcEJOYCjmSgRjhsjtuvFSVmVci';
+// const publicKey = "sandbox_i31110430124";
+// const privateKey = "sandbox_HJjraXMdCLnz3ApcEJOYCjmSgRjhsjtuvFSVmVci";
 
-// Endpoint to initiate a payment
-app.get('/initiate-payment', async (req, res) => {
+// // Endpoint to initiate a payment
+app.post("/initiate-payment", async (req, res) => {
   try {
-    const order = {
-      version: '3',
+    const publicKey = 'sandbox_i31110430124';
+    const privateKey = 'sandbox_HJjraXMdCLnz3ApcEJOYCjmSgRjhsjtuvFSVmVci';
+    var LiqPay = require('./my_modules/liqpay.js');
+    var liqpay = new LiqPay(publicKey, privateKey);
+    var html = liqpay.cnb_form({
+      version: "3",
       public_key: publicKey,
-      action: 'pay',
+      action: "pay",
       amount: 100, // Amount in your currency
-      currency: 'USD',
-      description: 'Payment for a product',
-      order_id: 'unique_order_id',
-      email: 'customer@email.com', // Add the customer's email here
-      product_id: 'product123', // Add the product ID here
-      result_url: 'https://vendmarket.space/payment-success',
-      server_url: 'https://api.vendmarket.space/callback',
-    };
+      currency: "UAH",
+      description: "Та й таке то1111",
+      order_id: "738437634673",
+      email: "customer@email.com", // Add the customer's email here
+      product_id: "product123", // Add the product ID here
+      result_url: "https://vendmarket.space",
+      server_url: "https://api.vendmarket.space/callback",
+    });
 
-    const signature = Buffer.from(privateKey + JSON.stringify(order) + privateKey).toString('base64');
-
-    order.signature = signature;
-
-    // Send the order to Liqpay
-    const response = await axios.post('https://www.liqpay.ua/api/3/checkout', order);
 
     // Redirect the user to the payment page
-    res.redirect(response.data.checkout_url);
+    res.json(html);
   } catch (error) {
     console.error(error);
-    res.status(500).send('Payment initiation failed');
+    res.status(500).send("Payment initiation failed");
   }
 });
 
-// Endpoint to handle Liqpay callback
-app.post('/callback', (req, res) => {
+
+app.post("/callback", (req, res) => {
   const data = req.body;
-  const signature = Buffer.from(privateKey + JSON.stringify(data) + privateKey).toString('base64');
+  const signature = Buffer.from(
+    privateKey + JSON.stringify(data) + privateKey
+  ).toString("base64");
 
   if (data.signature === signature) {
     // Payment is valid, update your database or perform necessary actions
-    console.log('Payment is valid:', data);
+    console.log("Payment is valid:", data);
   } else {
     // Payment is not valid, handle accordingly
-    console.log('Invalid payment:', data);
+    console.log("Invalid payment:", data);
   }
 
   // Respond to Liqpay callback
-  res.send('OK');
+  res.send("OK");
 });
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-// const publicKey = 'sandbox_i31110430124';
-// const privateKey = 'sandbox_HJjraXMdCLnz3ApcEJOYCjmSgRjhsjtuvFSVmVci';
-// var LiqPay = require('./my_modules/liqpay.js');
-// var liqpay = new LiqPay(publicKey, privateKey);
-// var html = liqpay.cnb_form({
-// 'action'         : 'pay',
-// 'amount'         : '5',
-// 'currency'       : 'UAH',
-// 'description'    : 'Оплата SMS',
-// 'order_id'       : 'eqwewqeqr3132dsaca324324',
-// 'version'        : '3',
-// "server_url":"http://localhost:8800/payment-callback"
-// });
-// console.log(html);
+// const publicKey = "sandbox_i31110430124";
+// const privateKey = "sandbox_HJjraXMdCLnz3ApcEJOYCjmSgRjhsjtuvFSVmVci";
 
 // const liqpayPublicKey = 'sandbox_i31110430124';
 // const liqpayPrivateKey = 'sandbox_HJjraXMdCLnz3ApcEJOYCjmSgRjhsjtuvFSVmVci';
 // app.post("/create-payment", async (req, res) => {
 //   try {
-//     const { amount, description, order_id } = req.body;
+//     // const { amount, description, order_id } = req.body;
+//     const amount = 100,
+//           description = 'qweeqwewqeqwqew',
+//           order_id = '132kj1j32382137281'
+
 //     // Define the LiqPay API URL
 //     const apiUrl = "https://www.liqpay.ua/api/3/checkout";
 
@@ -169,7 +133,7 @@ app.post('/callback', (req, res) => {
 //       public_key: liqpayPublicKey,
 //       action: "pay",
 //       amount: amount,
-//       currency: "USD", // Change to the desired currency
+//       currency: "UAH", // Change to the desired currency
 //       description: description,
 //       order_id: order_id,
 //     };
@@ -184,7 +148,7 @@ app.post('/callback', (req, res) => {
 //       data: Buffer.from(JSON.stringify(data)).toString("base64"),
 //       signature,
 //     });
-// console.log(response);
+// console.log(response.data);
 //     res.json(response.data);
 //   } catch (error) {
 //     console.error("Error creating LiqPay payment:", error);
@@ -192,7 +156,7 @@ app.post('/callback', (req, res) => {
 //   }
 // });
 
-// Endpoint to handle LiqPay payment callback notifications
+// // Endpoint to handle LiqPay payment callback notifications
 // app.post("/payment-callback", (req, res) => {
 //   // Handle the payment callback here
 //   console.log("LiqPay payment callback:", req.body);
