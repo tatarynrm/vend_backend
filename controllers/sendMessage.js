@@ -485,6 +485,7 @@ const changePin = async (req, res) => {
 };
 const changeNumber = async (req, res) => {
   const { data } = req.body;
+  console.log(data);
   try {
     // const queryParams = {
     //   grant_type: "password",
@@ -554,7 +555,8 @@ const changeNumber = async (req, res) => {
             `
           );
 
-          console.log("Response:", result);
+          console.log("Response:", result.rows);
+          res.json(result)
         // })
         // .catch((error) => {
         //   console.error("Error:", error.message);
