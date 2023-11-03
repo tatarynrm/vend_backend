@@ -65,8 +65,8 @@ const liqpayCallback = async (req, res) => {
 
       // Insert data with a parameterized query
       const result =
-        await client.query(`INSERT INTO client_pay (payment_id, user_id,status,info,amount,sender_name,sender_surname,sender_card_mask2,sender_card_bank,date)
-        VALUES (${el.payment_id},${el.user_id},'${el.status}','${el.info}','${el.amount}','${el.sender_name}','${el.sender_surname}','${el.sender_card_mask2}','${el.sender_card_bank}','${el.date}')
+        await client.query(`INSERT INTO client_pay (payment_id, user_id,status,info,amount,sender_name,sender_surname,sender_card_mask2,sender_card_bank)
+        VALUES (${el.payment_id},${el.user_id},'${el.status}','${el.info}',${el.amount},'${el.sender_name}','${el.sender_surname}','${el.sender_card_mask2}','${el.sender_card_bank}')
          `);
 
       console.log("Data inserted successfully:", result);
