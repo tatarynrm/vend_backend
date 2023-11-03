@@ -41,7 +41,7 @@ const createCheckout = async (req, res) => {
       description: "Поповнення особистого кабінету vendmarket.space",
       order_id: uuidv4(),
       version: "3",
-      result_url: "https://vendmarket.space",
+      result_url: "https://vendmarket.space/payment-success",
       server_url: "https://api.vendmarket.space/liqpay/callback",
       rro_info: {
         items: [
