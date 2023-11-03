@@ -32,7 +32,7 @@ const stringEncodeFunc = (str) => {
   return decodedString;
 };
 const createCheckout = async (req, res) => {
-  const { amount, user_id, name, surname } = req.body;
+  const { amount, company_id, name, surname } = req.body;
   try {
     const html = liqpay.cnb_form({
       action: "pay",
@@ -57,7 +57,7 @@ const createCheckout = async (req, res) => {
       sender_first_name: name,
       sender_last_name: surname,
       info: "VENDMARKET PAY FOR WATER MACHINE",
-      customer: +user_id,
+      customer: company_id,
     });
     res.json(html);
   } catch (error) {
@@ -84,11 +84,11 @@ const liqpayCallback = async (req, res) => {
       let decodedName = stringEncodeFunc(el.sender_first_name);
       let decodedLastName = stringEncodeFunc(el.sender_last_name);
       const result =
-        await db.query(`INSERT INTO client_pay (payment_id,amount,status,info,user_id,sender_name,sender_surname,sender_card_mask2,sender_card_bank)
+        await db.query(`INSERT INTO client_pay (payment_id,amount,status,info,company_id,sender_name,sender_surname,sender_card_mask2,sender_card_bank)
         VALUES (${el.payment_id},${el.amount},'${el.status}','${el.info}',${el.customer},'${decodedName}','${decodedLastName}','${el.sender_card_mask2}','${el.sender_card_bank}')
          `);
       const incrementBalanceToUser = await db.query(`
-    UPDATE public.user
+    UPDATE company
     SET balance = balance + ${el.amount}
     WHERE id = ${el.customer}`);
       console.log("Data inserted successfully:", result);
