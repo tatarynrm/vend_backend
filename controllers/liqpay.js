@@ -36,7 +36,7 @@ const createCheckout = async (req, res) => {
       sender_first_name: "Roman",
       sender_last_name: "Tataryn",
       info: "VENDMARKET PAY FOR WATER MACHINE",
-      customer:user_id
+      customer:+user_id
     });
     res.json(html);
   } catch (error) {
@@ -53,7 +53,7 @@ const liqpayCallback = () => {
     console.log("orderDATA", orderData);
     console.log("jsonSignature", jsonSignature);
     const orderId = orderData.order_id;
-    console.log(+orderData?.user_id);
+    console.log(orderData?.user_id);
     console.log("Order ID: ", orderId);
   } catch (error) {
     console.log(error);
