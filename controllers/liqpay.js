@@ -64,6 +64,7 @@ const liqpayCallback = async (req, res) => {
     // console.log('elllllllllllllllllll',el);
   const decodeUsername = Buffer.from(el.sender_first_name, 'utf-8').toString();
   const decodeUserLastname = Buffer.from(el.sender_last_name, 'utf-8').toString();
+  console.log("DECODEDDDDDDDDDDDDDDD",decodeUserLastname);
       // const text = `INSERT INTO client_pay (payment_id, user_id,status,info,amount,sender_name,sender_surname,sender_card_mask2,sender_card_bank,date)
       // VALUES ('${el.payment_id}','${el.user_id}','${el.status}','${el.info}','${el.amount}','${el.sender_name}','${el.sender_surname}','${el.sender_card_mask2}','${el.sender_card_bank}','${el.date}')
       //  `
