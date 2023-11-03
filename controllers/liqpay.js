@@ -8,7 +8,7 @@ const liqpay = new LiqPay(
   );
 const createCheckout = async (req, res) => {
   const { amount, user_id,name,surname } = req.body;
-  console.log(user_id);
+  console.log(req.body);
   try {
     // const public_key = process.env.LIQPAY_PUBLIC_KEY;
     // const private_key = process.env.LIQPAY_PRIVATE_KEY;
