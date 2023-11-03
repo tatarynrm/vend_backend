@@ -62,7 +62,7 @@ const liqpayCallback = async (req, res) => {
     console.log(orderData?.user_id);
     console.log("Order ID: ", orderId);
     console.log('elllllllllllllllllll',el);
-    if (orderData.status === "success") {
+  
       // const text = `INSERT INTO client_pay (payment_id, user_id,status,info,amount,sender_name,sender_surname,sender_card_mask2,sender_card_bank,date)
       // VALUES ('${el.payment_id}','${el.user_id}','${el.status}','${el.info}','${el.amount}','${el.sender_name}','${el.sender_surname}','${el.sender_card_mask2}','${el.sender_card_bank}','${el.date}')
       //  `
@@ -78,7 +78,7 @@ const liqpayCallback = async (req, res) => {
          `);
 
       console.log("Data inserted successfully:", result);
-    }
+
   } catch (error) {
     console.log(error);
   } 
