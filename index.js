@@ -87,6 +87,7 @@ const getButtonToPay = ()=>{
     },
     sender_first_name: "Roman",
     sender_last_name: "Tataryn",
+    info:"Payment for subscribe for a month"
   });
   console.log(html);
 }
@@ -168,12 +169,19 @@ console.log(decodedText);
   // );
   // res.sendStatus(200);
 });
+const encodedText = 'Ð\x9FÐ¾Ð¿Ð¾Ð²Ð½ÐµÐ½Ð½Ñ\x8F Ð¾Ñ\x81Ð¾Ð±Ð¸Ñ\x81Ñ\x82Ð¾Ð³Ð¾ ÐºÐ°Ð±Ñ\x96Ð½ÐµÑ\x82Ñ\x83 vendmarket.space';
 
-// Serve the React app
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname + "/client/build/index.html"));
-});
+// Split the encoded text into individual bytes
+const bytes = encodedText.split(' ').map(byte => parseInt(byte, 8));
 
+// Convert each byte to its corresponding character
+const decodedText = String.fromCharCode(...bytes);
+
+console.log(decodedText && decodedText);
+
+
+
+console.log('-----------',decodedText);
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });
