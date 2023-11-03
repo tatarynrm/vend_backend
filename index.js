@@ -6,8 +6,8 @@ const port = 8800; // Port number you want to use
 const moment = require("moment");
 const db = require("./db/db");
 const cors = require("cors");
-const path = require('path')
-
+const path = require("path");
+const { v4: uuidv4 } = require("uuid");
 const authRouter = require("./routes/auth");
 const msgRouter = require("./routes/sendMessage.js");
 const userRouter = require("./routes/user");
@@ -16,13 +16,12 @@ const machineRouter = require("./routes/machine");
 const companyRouter = require("./routes/company");
 const smsRouter = require("./routes/smsStatus");
 const { default: axios } = require("axios");
-app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static(path.join(__dirname, "client/build")));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 app.use(cors());
-
 
 app.use("/auth", authRouter);
 app.use("/msg", msgRouter);
@@ -61,24 +60,33 @@ const blockUserBeforePay = async () => {
 };
 blockUserBeforePay();
 
-
-
-
-
-const public_key = 'sandbox_i31110430124';
-    const private_key = 'sandbox_HJjraXMdCLnz3ApcEJOYCjmSgRjhsjtuvFSVmVci';
-    var LiqPay = require('./my_modules/liqpay.js');
-    var liqpay = new LiqPay(public_key, private_key);
-    var html = liqpay.cnb_form({
-    'action'         : 'pay',
-    'amount'         : '1',
-    'currency'       : 'USD',
-    'description'    : '312312321',
-    'order_id'       : '32131413f312312321123',
-    'version'        : '3',
-    'result_url':'http:localhost:3000',
-    'server_url':'https://api.vendmarket.space/callback'
-    });
+const public_key = process.env.LIQPAY_PUBLIC_KEY;
+const private_key = process.env.LIQPAY_PRIVATE_KEY;
+const LiqPay = require("./my_modules/liqpay.js");
+const liqpay = new LiqPay(public_key, private_key);
+const html = liqpay.cnb_form({
+  action: "pay",
+  amount: "1",
+  currency: "UAH",
+  description: "Поповнення особистого кабінету vendmarket.space",
+  order_id: uuidv4(),
+  version: "3",
+  result_url: "https://vendmarket.space",
+  server_url: "https://api.vendmarket.space/callback",
+  rro_info: {
+    items: [
+      {
+        amount: 2,
+        price: 202,
+        cost: 404,
+        id: 123456,
+      },
+    ],
+    delivery_emails: ["tatarynrm@gmail.com", "rt@ict.lviv.ua"],
+  },
+  sender_first_name: "Roman",
+  sender_last_name: "Tataryn",
+});
 console.log(html);
 // app.post('/makePayment', async (req, res) => {
 //   try {
@@ -118,74 +126,35 @@ console.log(html);
 //   }
 // });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Handle Liqpay callback (you need to set this URL in your Liqpay account settings)
-app.post('/callback', (req, res) => {
+app.post("/callback", (req, res) => {
   const data = req.body;
   // Process the callback data as needed (e.g., update your records)
   const jsonData = atob(data.data); // Decode base64
-const orderData = JSON.parse(jsonData);
-console.log(orderData);
-const orderId = orderData.order_id;
-console.log("Order ID: ", orderId);
-  liqpay.api("request", {
-    "action"   : "status",
-    "version"  : "3",
-    "order_id" : orderId
-    }, function( json ){
-    console.log( json.status );
-    });
+  const jsonSignature = atob(data.signature); // Decode base64
+  const orderData = JSON.parse(jsonData);
+  console.log('orderDATA',orderData);
+  console.log("jsonSignature",jsonSignature);
+  const orderId = orderData.order_id;
+  console.log("Order ID: ", orderId);
+  liqpay.api(
+    "request",
+    {
+      action: "status",
+      version: "3",
+      order_id: orderId,
+    },
+    function (json) {
+      console.log('JSON------',json.status);
+    }
+  );
   res.sendStatus(200);
 });
 
 // Serve the React app
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname + '/client/build/index.html'));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
