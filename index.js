@@ -15,6 +15,7 @@ const clientRouter = require("./routes/client");
 const machineRouter = require("./routes/machine");
 const companyRouter = require("./routes/company");
 const smsRouter = require("./routes/smsStatus");
+const LiqPayRouter = require('./routes/liqpay/liqpay')
 const { default: axios } = require("axios");
 app.use(express.static(path.join(__dirname, "client/build")));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
@@ -30,6 +31,7 @@ app.use("/client", clientRouter);
 app.use("/machine", machineRouter);
 app.use("/client", companyRouter);
 app.use("/sms", smsRouter);
+app.use("/liqpay/", LiqPayRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello, VENDMARKET!");
@@ -60,128 +62,59 @@ const blockUserBeforePay = async () => {
 };
 blockUserBeforePay();
 
-const getButtonToPay = ()=>{
-  const public_key = process.env.LIQPAY_PUBLIC_KEY;
-  const private_key = process.env.LIQPAY_PRIVATE_KEY;
-  const LiqPay = require("./my_modules/liqpay.js");
-  const liqpay = new LiqPay(public_key, private_key);
-  const html = liqpay.cnb_form({
-    action: "pay",
-    amount: "1",
-    currency: "UAH",
-    description: "Поповнення особистого кабінету vendmarket.space",
-    order_id: uuidv4(),
-    version: "3",
-    result_url: "https://vendmarket.space",
-    server_url: "https://api.vendmarket.space/callback",
-    rro_info: {
-      items: [
-        {
-          amount: 2,
-          price: 202,
-          cost: 404,
-          id: 123456,
-        },
-      ],
-      delivery_emails: ["tatarynrm@gmail.com", "rt@ict.lviv.ua"],
-    },
-    sender_first_name: "Roman",
-    sender_last_name: "Tataryn",
-    info:"Payment for subscribe for a month"
-  });
-  console.log(html);
-}
-getButtonToPay()
-// app.post('/makePayment', async (req, res) => {
-//   try {
-//     // Configure your Liqpay API credentials
-//     const public_key = 'sandbox_i31110430124';
-//     const private_key = 'sandbox_HJjraXMdCLnz3ApcEJOYCjmSgRjhsjtuvFSVmVci';
-
-//     // Define the payment data
-//     const paymentData = {
-//       action: 'pay',
-//       amount: 1000, // Replace with the payment amount
-//       currency: 'USD', // Replace with your preferred currency
-//       description: 'Payment for Products', // Replace with your order description
-//       order_id: '12345', // Replace with your order ID
-//       version: 3,
-//     };
-
-//     // Generate a signature
-//     const base64String = Buffer.from(JSON.stringify(paymentData)).toString('base64');
-//     const signature = Buffer.from(private_key + base64String + private_key).toString('base64');
-
-//     // Include the signature in the payment data
-//     paymentData.data = base64String;
-//     paymentData.signature = signature;
-
-//     // Make a POST request to Liqpay to create a payment link
-//     const response = await axios.post('https://www.liqpay.ua/api/3/checkout', paymentData);
-
-//     // Send the payment URL to the client
-//     console.log(response.data);
-//     // res.json({ paymentUrl: response.data.data.url });
-//     // res.json( response.data);
-//     res.send(response.data)
-//   } catch (error) {
-//     console.error('Payment request error:', error);
-//     res.status(500).send('Payment request failed.');
-//   }
-// });
+const getButtonToPay = async (req, res) => {
+  try {
+    const public_key = process.env.LIQPAY_PUBLIC_KEY;
+    const private_key = process.env.LIQPAY_PRIVATE_KEY;
+    const LiqPay = require("./my_modules/liqpay.js");
+    const liqpay = new LiqPay(public_key, private_key);
+    const html = liqpay.cnb_form({
+      action: "pay",
+      amount: "1",
+      currency: "UAH",
+      description: "Поповнення особистого кабінету vendmarket.space",
+      order_id: uuidv4(),
+      version: "3",
+      result_url: "https://vendmarket.space",
+      server_url: "https://api.vendmarket.space/callback",
+      rro_info: {
+        items: [
+          {
+            amount: 2,
+            price: 202,
+            cost: 404,
+            id: 123456,
+          },
+        ],
+        delivery_emails: ["tatarynrm@gmail.com", "rt@ict.lviv.ua"],
+      },
+      sender_first_name: "Roman",
+      sender_last_name: "Tataryn",
+      info: "VENDMARKET PAY FOR WATER MACHINE",
+    });
+    res.json(html);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 // Handle Liqpay callback (you need to set this URL in your Liqpay account settings)
-app.post("/callback", (req, res) => {
-  const data = req.body;
-  // Process the callback data as needed (e.g., update your records)
-  const jsonData = atob(data.data); // Decode base64
-  const jsonSignature = atob(data.signature); // Decode base64
-  const orderData = JSON.parse(jsonData);
+// app.post("/callback", (req, res) => {
+// try {
+//   const data = req.body;
+//   // Process the callback data as needed (e.g., update your records)
+//   const jsonData = atob(data.data); // Decode base64
+//   const jsonSignature = atob(data.signature); // Decode base64
+//   const orderData = JSON.parse(jsonData);
+//   console.log("orderDATA", orderData);
+//   console.log("jsonSignature", jsonSignature);
+//   const orderId = orderData.order_id;
+//   console.log("Order ID: ", orderId);
+// } catch (error) {
+//   console.log(error);
+// }
+// });
 
-  console.log('orderDATA',orderData);
-  console.log("jsonSignature",jsonSignature);
-
-
-  const orderId = orderData.order_id;
-
-
-  console.log("Order ID: ", orderId);
-
-
-  
-  const urlEncodedText = encodeURIComponent(orderData.description);
-
-// Decode the URL-encoded text to obtain the normal string
-const decodedText = decodeURIComponent(urlEncodedText);
-
-console.log(decodedText);
-
-  // liqpay.api(
-  //   "request",
-  //   {
-  //     action: "status",
-  //     version: "3",
-  //     order_id: orderId,
-  //   },
-  //   function (json) {
-  //     console.log('JSON------',json.status);
-  //   }
-  // );
-  // res.sendStatus(200);
-});
-const encodedText = 'Ð\x9FÐ¾Ð¿Ð¾Ð²Ð½ÐµÐ½Ð½Ñ\x8F Ð¾Ñ\x81Ð¾Ð±Ð¸Ñ\x81Ñ\x82Ð¾Ð³Ð¾ ÐºÐ°Ð±Ñ\x96Ð½ÐµÑ\x82Ñ\x83 vendmarket.space';
-
-// Split the encoded text into individual bytes
-const bytes = encodedText.split(' ').map(byte => parseInt(byte, 8));
-
-// Convert each byte to its corresponding character
-const decodedText = String.fromCharCode(...bytes);
-
-console.log(decodedText && decodedText);
-
-
-
-console.log('-----------',decodedText);
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });
