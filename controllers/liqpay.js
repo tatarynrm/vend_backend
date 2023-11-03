@@ -90,13 +90,14 @@ const liqpayCallback = async (req, res) => {
 
     console.log("Data inserted successfully:", result);
 
-    liqpay.api("request", {
+   const res1 = await  liqpay.api("request", {
         "action"   : "status",
         "version"  : "3",
         "order_id" : orderId
         }, function( json ){
         console.log( json.status );
         });
+        console.log(res1);
   } catch (error) {
     console.log(error);
   }
