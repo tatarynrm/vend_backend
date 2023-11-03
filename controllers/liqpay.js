@@ -44,7 +44,7 @@ const createCheckout = async (req, res) => {
   }
 };
 const liqpayCallback = async (req, res) => {
-  const client = await db.connect();
+
   try {
     const data = req.body;
     // Process the callback data as needed (e.g., update your records)
@@ -69,7 +69,7 @@ const liqpayCallback = async (req, res) => {
     //     VALUES (${el.payment_id},${el.user_id},'${el.status}','${el.info}',${el.amount},'${el.sender_name}','${el.sender_surname}','${el.sender_card_mask2}','${el.sender_card_bank}')
     //      `);
       const result =
-        await client.query(`INSERT INTO client_pay (payment_id, user_id,status,info)
+        await db.query(`INSERT INTO client_pay (payment_id, user_id,status,info)
         VALUES (${el.payment_id},${el.user_id},'${el.status}','${el.info}',${el.amount})
          `);
 
