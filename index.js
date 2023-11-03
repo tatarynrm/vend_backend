@@ -34,33 +34,33 @@ app.use("/sms", smsRouter);
 app.use("/liqpay/", LiqPayRouter);
 
 app.get("/", (req, res) => {
-  res.send("Hello, VENDMARKET!");
+  res.send("/");
 });
 
-const blockUserBeforePay = async () => {
-  const begin = moment().format("DD-MM-YYYY");
-  const firstDay = begin.slice(0, 2);
-  // console.log(firstDay);
-  try {
-    if (firstDay === "03") {
-      const updateQuery = {
-        text: "UPDATE public.user SET active = $1  WHERE  role = 0",
-        values: [0], // Replace with your new values and the target row's identifier
-      };
+// const blockUserBeforePay = async () => {
+//   const begin = moment().format("DD-MM-YYYY");
+//   const firstDay = begin.slice(0, 2);
+//   // console.log(firstDay);
+//   try {
+//     if (firstDay === "03") {
+//       const updateQuery = {
+//         text: "UPDATE public.user SET active = $1  WHERE  role = 0",
+//         values: [0], // Replace with your new values and the target row's identifier
+//       };
 
-      db.query(updateQuery)
-        .then((result) => {
-          console.log("Update successful");
-        })
-        .catch((error) => {
-          console.error("Error executing update query", error);
-        });
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
-blockUserBeforePay();
+//       db.query(updateQuery)
+//         .then((result) => {
+//           console.log("Update successful");
+//         })
+//         .catch((error) => {
+//           console.error("Error executing update query", error);
+//         });
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+// blockUserBeforePay();
 
 
 

@@ -30,8 +30,13 @@ const login = async(req,res) =>{
 const getMe = async (req,res)=>{
     // console.log(req);
     try {
-        const result = await db.query(`select * from public.user where email = '${req.userId}'`)
-   
+        // const result = await db.query(`select * from public.user where email = '${req.userId}'`)
+        const result = await db.query(`SELECT a.*, b.balance
+        FROM public.user AS a
+        INNER JOIN company AS b ON a.company_id = b.id
+        WHERE a.email = '${req.userId}';`)
+
+  
         res.status(200).json({...result.rows[0]})
     } catch (error) {
         console.log(error);

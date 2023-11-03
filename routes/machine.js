@@ -1,6 +1,6 @@
 const express = require("express");
 const checkAuth = require("../middleware/checkAuth");
-const { getMyMachine, getAllMachines, createNewMachine, editMachine, deleteMachine } = require("../controllers/machine");
+const { getMyMachine, getAllMachines, createNewMachine, editMachine, deleteMachine, machineBalanceUp } = require("../controllers/machine");
 const { changeAddress } = require("../controllers/machine");
 const router = express.Router();
 
@@ -10,5 +10,8 @@ router.route("/new-machine").post(createNewMachine);
 router.route("/edit").post(editMachine);
 router.route("/delete").post(deleteMachine);
 router.route("/change-adress").post(changeAddress);
+
+// BALANCE
+router.route("/balance-up").post(machineBalanceUp);
 
 module.exports = router;
