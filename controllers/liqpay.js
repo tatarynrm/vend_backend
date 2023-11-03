@@ -43,7 +43,7 @@ const createCheckout = async (req, res) => {
     console.log(error);
   }
 };
-const liqpayCallback = () => {
+const liqpayCallback = (req,res) => {
   try {
     const data = req.body;
     // Process the callback data as needed (e.g., update your records)
