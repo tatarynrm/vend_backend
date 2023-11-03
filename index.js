@@ -141,18 +141,18 @@ app.post("/callback", (req, res) => {
   const orderId = orderData.order_id;
   console.log("Order ID: ", orderId);
   console.log(orderData.description.toString("utf8"));
-  liqpay.api(
-    "request",
-    {
-      action: "status",
-      version: "3",
-      order_id: orderId,
-    },
-    function (json) {
-      console.log('JSON------',json.status);
-    }
-  );
-  res.sendStatus(200);
+  // liqpay.api(
+  //   "request",
+  //   {
+  //     action: "status",
+  //     version: "3",
+  //     order_id: orderId,
+  //   },
+  //   function (json) {
+  //     console.log('JSON------',json.status);
+  //   }
+  // );
+  // res.sendStatus(200);
 });
 
 // Serve the React app
