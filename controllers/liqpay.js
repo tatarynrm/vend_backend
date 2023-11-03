@@ -97,7 +97,7 @@ const liqpayCallback = async (req, res) => {
         }, function( json ){
         console.log( json.status );
         });
-        console.log(res1);
+    console.log('RES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',res1);
   } catch (error) {
     console.log(error);
   }
