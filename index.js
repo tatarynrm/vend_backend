@@ -74,12 +74,12 @@ const public_key = 'sandbox_i31110430124';
     'amount'         : '1',
     'currency'       : 'USD',
     'description'    : '312312321',
-    'order_id'       : '32131413fwdfewf41343132',
+    'order_id'       : '32131413f312312321123',
     'version'        : '3',
     'result_url':'http:localhost:3000',
     'server_url':'https://api.vendmarket.space/callback'
     });
-
+console.log(html);
 // app.post('/makePayment', async (req, res) => {
 //   try {
 //     // Configure your Liqpay API credentials
@@ -135,14 +135,13 @@ const public_key = 'sandbox_i31110430124';
 
 
 
-
 // Handle Liqpay callback (you need to set this URL in your Liqpay account settings)
 app.post('/callback', (req, res) => {
   const data = req.body;
   // Process the callback data as needed (e.g., update your records)
   const jsonData = atob(data.data); // Decode base64
 const orderData = JSON.parse(jsonData);
-
+console.log(orderData);
 const orderId = orderData.order_id;
 console.log("Order ID: ", orderId);
   liqpay.api("request", {
