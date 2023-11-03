@@ -56,13 +56,14 @@ const liqpayCallback = async (req, res) => {
     const jsonSignature = atob(data.signature); // Decode base64
     const orderData = JSON.parse(jsonData);
     const el = orderData;
-    console.log("orderDATA", orderData);
-    console.log("jsonSignature", jsonSignature);
+    // console.log("orderDATA", orderData);
+    // console.log("jsonSignature", jsonSignature);
     const orderId = orderData.order_id;
-    console.log(orderData?.user_id);
-    console.log("Order ID: ", orderId);
-    console.log('elllllllllllllllllll',el);
-  
+    // console.log(orderData?.user_id);
+    // console.log("Order ID: ", orderId);
+    // console.log('elllllllllllllllllll',el);
+  const decodeUsername = Buffer.from(el.sender_first_name, 'utf-8').toString();
+  const decodeUserLastname = Buffer.from(el.sender_last_name, 'utf-8').toString();
       // const text = `INSERT INTO client_pay (payment_id, user_id,status,info,amount,sender_name,sender_surname,sender_card_mask2,sender_card_bank,date)
       // VALUES ('${el.payment_id}','${el.user_id}','${el.status}','${el.info}','${el.amount}','${el.sender_name}','${el.sender_surname}','${el.sender_card_mask2}','${el.sender_card_bank}','${el.date}')
       //  `
@@ -74,7 +75,7 @@ const liqpayCallback = async (req, res) => {
     //      `);
       const result =
         await db.query(`INSERT INTO client_pay (payment_id,amount,status,info,user_id,sender_name,sender_surname,sender_card_mask2,sender_card_bank)
-        VALUES (${el.payment_id},${el.amount},'${el.status}','${el.info}',${el.customer},'${el.sender_first_name}','${el.sender_last_name}','${el.sender_card_mask2}','${el.sender_card_bank}')
+        VALUES (${el.payment_id},${el.amount},'${el.status}','${el.info}',${el.customer},'${decodeUsername}','${decodeUserLastname}','${el.sender_card_mask2}','${el.sender_card_bank}')
          `);
 
       console.log("Data inserted successfully:", result);
