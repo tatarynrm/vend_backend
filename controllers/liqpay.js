@@ -71,16 +71,14 @@ const liqpayCallback = async (req, res) => {
     const jsonData = atob(data.data); // Decode base64
     const jsonSignature = atob(data.signature); // Decode base64
     const orderData = JSON.parse(jsonData);
-    const el = orderData;
     const orderId = orderData.order_id;
-    const decodeUsername = Buffer.from(
-      el.sender_first_name,
-      "utf-8"
-    ).toString();
-    const decodeUserLastname = Buffer.from(
-      el.sender_last_name,
-      "utf-8"
-    ).toString();
+    const el = orderData;
+
+const existPay = db.query(`select * from client_pay where payment_id = ${orderId}`)
+console.log('exist pay rows',existPay.rows);
+
+ 
+
     let decodedName = stringEncodeFunc(el.sender_first_name);
     let decodedLastName = stringEncodeFunc(el.sender_last_name);
     const result =
@@ -90,14 +88,14 @@ const liqpayCallback = async (req, res) => {
 
     console.log("Data inserted successfully:", result);
 
-   const res1 = await  liqpay.api("request", {
-        "action"   : "status",
-        "version"  : "3",
-        "order_id" : orderId
-        }, function( json ){
-        console.log( json.status );
-        });
-    console.log('RES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',res1);
+//    const res1 = await  liqpay.api("request", {
+//         "action"   : "status",
+//         "version"  : "3",
+//         "order_id" : orderId
+//         }, function( json ){
+//         console.log( json.status );
+//         });
+
   } catch (error) {
     console.log(error);
   }
