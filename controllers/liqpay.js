@@ -2,17 +2,21 @@ const LiqPay = require("../my_modules/liqpay");
 const db = require("../db/db");
 const { v4: uuidv4 } = require("uuid");
 
+const liqpay = new LiqPay(
+    process.env.LIQPAY_PUBLIC_KEY,
+    process.env.LIQPAY_PRIVATE_KEY
+  );
 const createCheckout = async (req, res) => {
   const { amount, user_id } = req.body;
   console.log(user_id);
   try {
-    const public_key = process.env.LIQPAY_PUBLIC_KEY;
-    const private_key = process.env.LIQPAY_PRIVATE_KEY;
+    // const public_key = process.env.LIQPAY_PUBLIC_KEY;
+    // const private_key = process.env.LIQPAY_PRIVATE_KEY;
 
-    const liqpay = new LiqPay(
-      process.env.LIQPAY_PUBLIC_KEY,
-      process.env.LIQPAY_PRIVATE_KEY
-    );
+    // const liqpay = new LiqPay(
+    //     process.env.LIQPAY_PUBLIC_KEY,
+    //     process.env.LIQPAY_PRIVATE_KEY
+    //   );
     const html = liqpay.cnb_form({
       action: "pay",
       amount: amount,
