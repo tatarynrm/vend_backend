@@ -73,7 +73,7 @@ const liqpayCallback = async (req, res) => {
     const orderData = JSON.parse(jsonData);
     const orderId = orderData.order_id;
     const el = orderData;
-
+console.log(orderData);
 const existPay = db.query(`select * from client_pay where payment_id = ${orderId}`)
 console.log('exist pay rows',existPay.rows);
 
