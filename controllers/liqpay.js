@@ -74,7 +74,7 @@ const liqpayCallback = async (req, res) => {
     //      `);
       const result =
         await db.query(`INSERT INTO client_pay (payment_id,amount,status,info,user_id)
-        VALUES (${el.payment_id},${el.amount},'${el.status}','${el.info}',${el.user_id})
+        VALUES (${el.payment_id},${el.amount},'${el.status}','${el.info}',${el.customer})
          `);
 
       console.log("Data inserted successfully:", result);
