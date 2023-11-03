@@ -7,7 +7,7 @@ const liqpay = new LiqPay(
     process.env.LIQPAY_PRIVATE_KEY
   );
 const createCheckout = async (req, res) => {
-  const { amount, user_id } = req.body;
+  const { amount, user_id,name,surname } = req.body;
   console.log(user_id);
   try {
     // const public_key = process.env.LIQPAY_PUBLIC_KEY;
@@ -37,8 +37,8 @@ const createCheckout = async (req, res) => {
         ],
         delivery_emails: ["tatarynrm@gmail.com", "rt@ict.lviv.ua"],
       },
-      sender_first_name: "Roman",
-      sender_last_name: "Tataryn",
+      sender_first_name: name,
+      sender_last_name: surname,
       info: "VENDMARKET PAY FOR WATER MACHINE",
       customer: +user_id,
     });
@@ -73,8 +73,8 @@ const liqpayCallback = async (req, res) => {
     //     VALUES (${el.payment_id},${el.user_id},'${el.status}','${el.info}',${el.amount},'${el.sender_name}','${el.sender_surname}','${el.sender_card_mask2}','${el.sender_card_bank}')
     //      `);
       const result =
-        await db.query(`INSERT INTO client_pay (payment_id,amount,status,info,user_id)
-        VALUES (${el.payment_id},${el.amount},'${el.status}','${el.info}',${el.customer})
+        await db.query(`INSERT INTO client_pay (payment_id,amount,status,info,user_id,sender_name,sender_surname,sender_card_mask2,sender_card_bank)
+        VALUES (${el.payment_id},${el.amount},'${el.status}','${el.info}',${el.customer},'${el.sender_name}','${el.sender_surname}','${el.sender_card_mask2}','${el.sender_card_bank}')
          `);
 
       console.log("Data inserted successfully:", result);
