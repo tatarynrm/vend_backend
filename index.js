@@ -147,8 +147,14 @@ app.post("/callback", (req, res) => {
   console.log("Order ID: ", orderId);
 
 
- const decoded_text = orderData.description.encode('utf-8').decode('utf-8')
- console.log(decoded_text);
+  
+  const urlEncodedText = encodeURIComponent(orderData.description);
+
+// Decode the URL-encoded text to obtain the normal string
+const decodedText = decodeURIComponent(urlEncodedText);
+
+console.log(decodedText);
+
   // liqpay.api(
   //   "request",
   //   {
