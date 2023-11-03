@@ -136,11 +136,19 @@ app.post("/callback", (req, res) => {
   const jsonData = atob(data.data); // Decode base64
   const jsonSignature = atob(data.signature); // Decode base64
   const orderData = JSON.parse(jsonData);
+
   console.log('orderDATA',orderData);
   console.log("jsonSignature",jsonSignature);
+
+
   const orderId = orderData.order_id;
+
+
   console.log("Order ID: ", orderId);
-  console.log(orderData.description.toString("utf8"));
+
+
+ const decoded_text = orderData.description.encode('utf-8').decode('utf-8')
+ console.log(decoded_text);
   // liqpay.api(
   //   "request",
   //   {
