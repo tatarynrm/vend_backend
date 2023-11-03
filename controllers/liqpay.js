@@ -21,7 +21,7 @@ const createCheckout = async (req, res) => {
       order_id: uuidv4(),
       version: "3",
       result_url: "https://vendmarket.space",
-      server_url: "https://api.vendmarket.space/callback",
+      server_url: "https://api.vendmarket.space/liqpay/callback",
       rro_info: {
         items: [
           {
