@@ -74,19 +74,22 @@ const liqpayCallback = async (req, res) => {
     const orderId = orderData.order_id;
     const el = orderData;
 console.log(orderData);
-const existPay = db.query(`select * from client_pay where payment_id = ${orderId}`)
+const existPay = db.query(`select * from client_pay where payment_id = ${el.payment_id}`)
 console.log('exist pay rows',existPay.rows);
-
- 
-
+if (existPay.rows > 0) {
+    return null
+}else {
     let decodedName = stringEncodeFunc(el.sender_first_name);
     let decodedLastName = stringEncodeFunc(el.sender_last_name);
     const result =
       await db.query(`INSERT INTO client_pay (payment_id,amount,status,info,user_id,sender_name,sender_surname,sender_card_mask2,sender_card_bank)
         VALUES (${el.payment_id},${el.amount},'${el.status}','${el.info}',${el.customer},'${decodedName}','${decodedLastName}','${el.sender_card_mask2}','${el.sender_card_bank}')
          `);
-
     console.log("Data inserted successfully:", result);
+}
+ 
+
+
 
 //    const res1 = await  liqpay.api("request", {
 //         "action"   : "status",
