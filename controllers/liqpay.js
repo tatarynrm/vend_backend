@@ -1,59 +1,41 @@
 const LiqPay = require("../my_modules/liqpay");
 const db = require("../db/db");
 const { v4: uuidv4 } = require("uuid");
-const iconv = require('iconv-lite'); // You may need to install the 'iconv-lite' package via npm
-
-const encodedString = "Ð\x9FÐ¾Ð¿Ð¾Ð²Ð½ÐµÐ½Ð½Ñ\x8F Ð¾Ñ\x81Ð¾Ð±Ð¸Ñ\x81Ñ\x82Ð¾Ð³Ð¾ ÐºÐ°Ð±Ñ\x96Ð½ÐµÑ\x82Ñ\x83 vendmarket.space";
+const iconv = require("iconv-lite"); // You may need to install the 'iconv-lite' package via npm
 
 const encodingsToTry = [
-  'utf-8',
-  'utf-16le',
-  'utf-16be',
-  'cp1251', // Windows-1251
-  'cp866',  // IBM866
-  'iso-8859-5',
-  'koi8-r',
-  'koi8-u',
-  'iso-8859-1', // Latin-1
-  'windows-1252', // Latin-1 (Windows)
+  "utf-8",
+  "utf-16le",
+  "utf-16be",
+  "cp1251", // Windows-1251
+  "cp866", // IBM866
+  "iso-8859-5",
+  "koi8-r",
+  "koi8-u",
+  "iso-8859-1", // Latin-1
+  "windows-1252", // Latin-1 (Windows)
 ];
 
-let decodedString = '';
-
-for (const encoding of encodingsToTry) {
-  try {
-    decodedString = iconv.decode(Buffer.from(encodedString, 'binary'), encoding);
-    break;
-  } catch (error) {
-    console.log(`Decoding with ${encoding} failed: ${error}`);
+const stringEncodeFunc = (str) => {
+  let decodedString = "";
+  for (const encoding of encodingsToTry) {
+    try {
+      decodedString = iconv.decode(Buffer.from(str, "binary"), encoding);
+      break;
+    } catch (error) {
+      console.log(`Decoding with ${encoding} failed: ${error}`);
+    }
   }
-}
-
-console.log(decodedString);
-
-
-const stringEncodeFunc = (str) =>{
-    let decodedString = '';
-    for (const encoding of encodingsToTry) {
-        try {
-          decodedString = iconv.decode(Buffer.from(encodedString, 'binary'), encoding);
-          break;
-        } catch (error) {
-          console.log(`Decoding with ${encoding} failed: ${error}`);
-        }
-      }
-      return decodedString
-}
+  return decodedString;
+};
 // console.log(stringEncodeFunc(encodedString));
 
-
-
 const liqpay = new LiqPay(
-    process.env.LIQPAY_PUBLIC_KEY,
-    process.env.LIQPAY_PRIVATE_KEY
-  );
+  process.env.LIQPAY_PUBLIC_KEY,
+  process.env.LIQPAY_PRIVATE_KEY
+);
 const createCheckout = async (req, res) => {
-  const { amount, user_id,name,surname } = req.body;
+  const { amount, user_id, name, surname } = req.body;
   console.log(req.body);
   try {
     // const public_key = process.env.LIQPAY_PUBLIC_KEY;
@@ -94,7 +76,6 @@ const createCheckout = async (req, res) => {
   }
 };
 const liqpayCallback = async (req, res) => {
-
   try {
     const data = req.body;
     // Process the callback data as needed (e.g., update your records)
@@ -108,29 +89,34 @@ const liqpayCallback = async (req, res) => {
     // console.log(orderData?.user_id);
     // console.log("Order ID: ", orderId);
     // console.log('elllllllllllllllllll',el);
-  const decodeUsername = Buffer.from(el.sender_first_name, 'utf-8').toString();
-  const decodeUserLastname = Buffer.from(el.sender_last_name, 'utf-8').toString();
-  let decodedName = stringEncodeFunc(el.sender_first_name)
-  let decodedLastName = stringEncodeFunc(el.sender_last_name)
-      // const text = `INSERT INTO client_pay (payment_id, user_id,status,info,amount,sender_name,sender_surname,sender_card_mask2,sender_card_bank,date)
-      // VALUES ('${el.payment_id}','${el.user_id}','${el.status}','${el.info}','${el.amount}','${el.sender_name}','${el.sender_surname}','${el.sender_card_mask2}','${el.sender_card_bank}','${el.date}')
-      //  `
+    const decodeUsername = Buffer.from(
+      el.sender_first_name,
+      "utf-8"
+    ).toString();
+    const decodeUserLastname = Buffer.from(
+      el.sender_last_name,
+      "utf-8"
+    ).toString();
+    let decodedName = stringEncodeFunc(el.sender_first_name);
+    let decodedLastName = stringEncodeFunc(el.sender_last_name);
+    // const text = `INSERT INTO client_pay (payment_id, user_id,status,info,amount,sender_name,sender_surname,sender_card_mask2,sender_card_bank,date)
+    // VALUES ('${el.payment_id}','${el.user_id}','${el.status}','${el.info}','${el.amount}','${el.sender_name}','${el.sender_surname}','${el.sender_card_mask2}','${el.sender_card_bank}','${el.date}')
+    //  `
 
-      // Insert data with a parameterized query
+    // Insert data with a parameterized query
     //   const result =
     //     await client.query(`INSERT INTO client_pay (payment_id, user_id,status,info,amount,sender_name,sender_surname,sender_card_mask2,sender_card_bank)
     //     VALUES (${el.payment_id},${el.user_id},'${el.status}','${el.info}',${el.amount},'${el.sender_name}','${el.sender_surname}','${el.sender_card_mask2}','${el.sender_card_bank}')
     //      `);
-      const result =
-        await db.query(`INSERT INTO client_pay (payment_id,amount,status,info,user_id,sender_name,sender_surname,sender_card_mask2,sender_card_bank)
+    const result =
+      await db.query(`INSERT INTO client_pay (payment_id,amount,status,info,user_id,sender_name,sender_surname,sender_card_mask2,sender_card_bank)
         VALUES (${el.payment_id},${el.amount},'${el.status}','${el.info}',${el.customer},'${decodedName}','${decodedLastName}','${el.sender_card_mask2}','${el.sender_card_bank}')
          `);
 
-      console.log("Data inserted successfully:", result);
-
+    console.log("Data inserted successfully:", result);
   } catch (error) {
     console.log(error);
-  } 
+  }
 };
 module.exports = {
   createCheckout,
