@@ -17,6 +17,9 @@ const companyRouter = require("./routes/company");
 const smsRouter = require("./routes/smsStatus");
 const LiqPayRouter = require('./routes/liqpay/liqpay')
 const axios = require("axios");
+const cron = require('node-cron');
+const { exec } = require('child_process');
+const { testSchedule } = require("./own_functions/shedules.js");
 app.use(express.static(path.join(__dirname, "client/build")));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
@@ -62,10 +65,9 @@ app.get("/", (req, res) => {
 // };
 // blockUserBeforePay();
 
-
-
-
-
+// SCHEDULE WORK!!!!
+testSchedule()
+// SCHEDULE WORK!!!!
 
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
