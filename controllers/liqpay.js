@@ -80,7 +80,9 @@ const liqpayCallback = async (req, res) => {
     console.log("exist pay rows", existPay.rows);
     if (existPay.rows > 0) {
       return null;
-    } else {
+    } 
+
+    if (el.status === 'success') {
       let decodedName = stringEncodeFunc(el.sender_first_name);
       let decodedLastName = stringEncodeFunc(el.sender_last_name);
       const result =
@@ -93,7 +95,6 @@ const liqpayCallback = async (req, res) => {
     WHERE id = ${el.customer}`);
       console.log("Data inserted successfully:", result);
     }
-
     //    const res1 = await  liqpay.api("request", {
     //         "action"   : "status",
     //         "version"  : "3",
