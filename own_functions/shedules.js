@@ -23,6 +23,28 @@ const testSchedule = () => {
 };
 
 
+// function isLastDayOfMonth() {
+//   const today = new Date();
+//   const nextDay = new Date();
+//   nextDay.setDate(today.getDate() + 1);
+//   return today.getMonth() !== nextDay.getMonth();
+// }
+
+// // Define the cron schedule to check if today is the last day of the month (e.g., every day at midnight)
+// const schedule = '0 0 * * *'; // Midnight
+
+// // Schedule the task
+// cron.schedule(schedule, () => {
+//   if (isLastDayOfMonth()) {
+//     // Call your function to run on the last day of the month
+//     yourFunctionToRunOnLastDay();
+//   }
+// });
+
+// function yourFunctionToRunOnLastDay() {
+//   console.log('This function runs on the last day of the month.');
+// }
+
 module.exports = {
   testSchedule,
 };

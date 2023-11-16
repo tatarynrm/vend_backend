@@ -138,23 +138,19 @@ const changeAddress = async (req, res) => {
 
 const machineBalanceUp = async (req, res) => {
   const { company_id, id } = req.body;
-  console.log(company_id);
+ 
   try {
     const result = await db.query(
       `SELECT a.balance FROM company a WHERE a.id = ${company_id}`
     );
     if (result.rows[0].balance >= 100) {
-      console.log("TRUE");
+
       const res1 = await db.query(`
       update water_machine 
       set month_balance = 100
       where id = ${id}
       RETURNING month_balance
       `);
-      const decrementUserBalance = await db.query(`
-      UPDATE company
-      SET balance = balance - 100
-      WHERE id = ${company_id}`);
       res.json(res1.rows[0].month_balance);
     } else {
       res.json({
@@ -166,6 +162,36 @@ const machineBalanceUp = async (req, res) => {
     console.log(error);
   }
 };
+const blockOrUnblockMachine = async (req,res) =>{
+const {machine_id} = req.body
+  try {
+    const result = await db.query(`select * from water_machine where machine_id = ${machine_id}`);
+    const balance = result.rows[0].month_balance
+if (balance >= 100) {
+  await db.query(`
+  update water_machine 
+  set month_balance = 0
+  where machine_id = ${machine_id}
+  `)
+  res.json({
+    balance:0
+  })
+}else {
+  await db.query(`
+  update water_machine 
+  set month_balance = 100
+  where machine_id = ${machine_id}
+  `)
+  res.json({
+    balance:100
+  })
+}
+  
+
+  } catch (error) {
+    console.log(error);
+  }
+}
 module.exports = {
   getMyMachine,
   getAllMachines,
@@ -174,4 +200,5 @@ module.exports = {
   deleteMachine,
   changeAddress,
   machineBalanceUp,
+  blockOrUnblockMachine
 };
