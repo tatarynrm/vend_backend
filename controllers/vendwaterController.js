@@ -36,11 +36,10 @@ const changeMachineValues = async (req,res)=>{
     }
 }
 const changeNumber = async (req,res)=>{
-    const {phone,id} = req.body;
-console.log(req.body);
+    const {phone_number,id} = req.body;
 
     try {
-      const result = await db.query('UPDATE vendwater_contacts SET phone = $1 WHERE id = $2', [phone,id]);
+      const result = await db.query(`update vendwater_contacts set phone_number =  ${phone_number} where id = ${id}`);
       console.log(result);
       res.status(200).json({ message: 'Record updated successfully' });
     } catch (error) {
