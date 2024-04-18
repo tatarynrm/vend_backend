@@ -16,6 +16,7 @@ const machineRouter = require("./routes/machine");
 const companyRouter = require("./routes/company");
 const smsRouter = require("./routes/smsStatus");
 const LiqPayRouter = require('./routes/liqpay/liqpay')
+const vendWaterSiteRouter = require('./routes/vendwaterController')
 const axios = require("axios");
 const cron = require('node-cron');
 const { exec } = require('child_process');
@@ -35,6 +36,8 @@ app.use("/machine", machineRouter);
 app.use("/client", companyRouter);
 app.use("/sms", smsRouter);
 app.use("/liqpay/", LiqPayRouter);
+// Site
+app.use("/site/", vendWaterSiteRouter);
 
 app.get("/", (req, res) => {
   res.send("/");

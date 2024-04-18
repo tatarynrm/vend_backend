@@ -26,6 +26,19 @@ const getAllMachines = async (req, res) => {
     console.log(error);
   }
 };
+const getOneMachine = async (req, res) => {
+const {id} = req.params
+  try {
+    // const result = await db.query(`select * from water_machine`);
+    const result = await db.query(
+      `select * from water_machine a full outer join company b on a.company_id = b.id where a.machine_id = ${id}`
+    );
+
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const createNewMachine = async (req, res) => {
   const {
@@ -195,6 +208,7 @@ if (balance >= 100) {
 module.exports = {
   getMyMachine,
   getAllMachines,
+  getOneMachine,
   createNewMachine,
   editMachine,
   deleteMachine,
