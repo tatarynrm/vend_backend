@@ -1,4 +1,6 @@
 const LiqPay = require("../my_modules/liqpay");
+const crypto = require('crypto')
+const QRCode = require('qrcode');
 const liqpay = new LiqPay(
   process.env.LIQPAY_PUBLIC_KEY,
   process.env.LIQPAY_PRIVATE_KEY
@@ -80,7 +82,7 @@ const liqpayCallback = async (req, res) => {
     console.log("exist pay rows", existPay.rows);
     if (existPay.rows > 0) {
       return null;
-    } 
+    }
 
     if (el.status === 'success') {
       let decodedName = stringEncodeFunc(el.sender_first_name);
@@ -106,7 +108,52 @@ const liqpayCallback = async (req, res) => {
     console.log(error);
   }
 };
+
+
+// Дані для оплати
+const params = {
+  public_key: process.env.LIQPAY_PUBLIC_KEY,
+  version: '3',
+  action: 'pay',
+  amount: '30', // Сума платежу
+  currency: 'UAH', // Валюта платежу
+  description: 'Оплата за воду', // Опис платежу
+  order_id: 'device_123456', // Використовуйте ваш device_id
+  sandbox: '1' // Увімкніть тестовий режим для перевірки (1 для sandbox, 0 для live)
+};
+
+// Функція для створення підпису LiqPay
+function createLiqPaySignature(params) {
+  const base64Params = Buffer.from(JSON.stringify(params)).toString('base64');
+  const signature = crypto.createHash('sha1')
+                          .update(process.env.LIQPAY_PRIVATE_KEY + base64Params + process.env.LIQPAY_PRIVATE_KEY)
+                          .digest('base64');
+  return signature;
+}
+
+// Формування підпису
+const data = Buffer.from(JSON.stringify(params)).toString('base64');
+const signature = createLiqPaySignature(params);
+
+// Формуємо платіжне посилання
+const liqpayLink = `https://www.liqpay.ua/api/3/checkout?data=${data}&signature=${signature}`;
+
+// Генерація QR-коду
+QRCode.toFile('./liqpay-qr.png', liqpayLink, {
+  color: {
+    dark: '#000000',  // Колір темних пікселів
+    light: '#ffffff'  // Колір світлих пікселів
+  },
+  width: 300, // Ширина зображення QR-коду
+}, (err) => {
+  if (err) throw err;
+  console.log('QR-код створено!');
+});
+
+console.log('Посилання на оплату через LiqPay:', liqpayLink);
+
 module.exports = {
   createCheckout,
-  liqpayCallback,
+  liqpayCallback
+
 };

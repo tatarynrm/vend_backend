@@ -87,7 +87,7 @@ const editMachine = async (req, res) => {
     machine_pin,
     company_id,
   } = req.body;
-
+console.log(req.body);
   try {
     if (company_id === undefined) {
       const result = await db.query(

@@ -21,6 +21,7 @@ const axios = require("axios");
 const cron = require('node-cron');
 const { exec } = require('child_process');
 const { testSchedule } = require("./own_functions/shedules.js");
+const { creaeteQRCodeLiqPayDevice, createQRCodeLiqPay } = require("./controllers/liqpay.js");
 app.use(express.static(path.join(__dirname, "client/build")));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
@@ -71,6 +72,36 @@ app.get("/", (req, res) => {
 // SCHEDULE WORK!!!!
 testSchedule()
 // SCHEDULE WORK!!!!
+
+app.get('/current-time',async (req,res) =>{
+ 
+  const date = new Date();
+  try {
+    console.log("Секунди: ", date.getSeconds()); // 0
+    console.log("Хвилини: ", date.getMinutes()); // 51
+    console.log("Години: ", date.getHours()); // 21
+    console.log("Число місяця: ", date.getDate()); // 27
+    console.log("Місяць: ", date.getMonth() + 1); // 10 (додаємо 1, щоб отримати місяць у форматі від 1 до 12)
+    console.log("Рік: ", date.getFullYear()); // 2015
+    
+    // Для передачі значень на C можна створити об'єкт або рядок
+    const time = {
+        seconds: date.getSeconds(),
+        minutes: date.getMinutes(),
+        hours: date.getHours(),
+        day: date.getDate(),
+        month: date.getMonth() + 1, // Додаємо 1, оскільки JavaScript місяці нумеруються з 0
+        year: date.getFullYear() - 2000
+    };
+    
+    // Вивід об'єкта для перевірки
+    console.log("Часові параметри для C:", time);
+
+    res.send(`0=${time.seconds}&1=${time.minutes}&${time.hours}&${time.day}&${time.month}&${time.year}`)
+  } catch (error) {
+    console.log(error);
+  }
+})
 
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
