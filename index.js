@@ -83,7 +83,8 @@ app.get('/current-time',async (req,res) =>{
     console.log("Число місяця: ", date.getDate()); // 27
     console.log("Місяць: ", date.getMonth() + 1); // 10 (додаємо 1, щоб отримати місяць у форматі від 1 до 12)
     console.log("Рік: ", date.getFullYear()); // 2015
-    
+    const standardDay = date.getDay();
+    const customDay = (standardDay + 6) % 7;
     // Для передачі значень на C можна створити об'єкт або рядок
     const time = {
         seconds: date.getSeconds(),
@@ -91,13 +92,14 @@ app.get('/current-time',async (req,res) =>{
         hours: date.getHours(),
         day: date.getDate(),
         month: date.getMonth() + 1, // Додаємо 1, оскільки JavaScript місяці нумеруються з 0
-        year: date.getFullYear() - 2000
+        year: date.getFullYear() - 2000,
+        weekDay:customDay
     };
     
     // Вивід об'єкта для перевірки
-    console.log("Часові параметри для C:", time);
+    console.log("Часові параметри для C:", time.weekDay);
 
-    res.send(`0=${time.seconds}&1=${time.minutes}&${time.hours}&${time.day}&${time.month}&${time.year}`)
+    res.send(`0=${time.seconds}&1=${time.minutes}&2=${time.hours}&3=${time.day}&4=${time.month}&5=${time.year}&6=${time.weekDay}`)
   } catch (error) {
     console.log(error);
   }
