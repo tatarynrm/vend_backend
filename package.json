@@ -24,6 +24,7 @@
     "iconv-lite": "^0.6.3",
     "jsonwebtoken": "^9.0.0",
     "liqpay": "^0.0.1",
+    "luxon": "^3.4.4",
     "moment": "^2.29.4",
     "node-cron": "^3.0.2",
     "node-openvpn": "^0.1.1",

@@ -22,6 +22,7 @@ const cron = require('node-cron');
 const { exec } = require('child_process');
 const { testSchedule } = require("./own_functions/shedules.js");
 const { creaeteQRCodeLiqPayDevice, createQRCodeLiqPay } = require("./controllers/liqpay.js");
+const { DateTime } = require('luxon');
 app.use(express.static(path.join(__dirname, "client/build")));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
@@ -73,38 +74,63 @@ app.get("/", (req, res) => {
 testSchedule()
 // SCHEDULE WORK!!!!
 
-app.get('/current-time',async (req,res) =>{
+// app.get('/current-time',async (req,res) =>{
  
-  const date = new Date();
+//   const date = new Date();
+//   try {
+//     console.log("Секунди: ", date.getSeconds()); // 0
+//     console.log("Хвилини: ", date.getMinutes()); // 51
+//     console.log("Години: ", date.getHours()); // 21
+//     console.log("Число місяця: ", date.getDate()); // 27
+//     console.log("Місяць: ", date.getMonth() + 1); // 10 (додаємо 1, щоб отримати місяць у форматі від 1 до 12)
+//     console.log("Рік: ", date.getFullYear()); // 2015
+//     const standardDay = date.getDay();
+//     const customDay = (standardDay + 6) % 7;
+//     // Для передачі значень на C можна створити об'єкт або рядок
+//     const time = {
+//         seconds: date.getSeconds(),
+//         minutes: date.getMinutes(),
+//         hours: date.getHours(),
+//         day: date.getDate(),
+//         month: date.getMonth() + 1, // Додаємо 1, оскільки JavaScript місяці нумеруються з 0
+//         year: date.getFullYear() - 2000,
+//         weekDay:customDay
+//     };
+    
+//     // Вивід об'єкта для перевірки
+//     console.log("Часові параметри для C:", time.weekDay);
+
+//     res.send(`0=${time.seconds}&1=${time.minutes}&2=${time.hours}&3=${time.day}&4=${time.month}&5=${time.year}&6=${time.weekDay}`)
+//   } catch (error) {
+//     console.log(error);
+//   }
+// })
+app.get('/current-time', async (req, res) => {
   try {
-    console.log("Секунди: ", date.getSeconds()); // 0
-    console.log("Хвилини: ", date.getMinutes()); // 51
-    console.log("Години: ", date.getHours()); // 21
-    console.log("Число місяця: ", date.getDate()); // 27
-    console.log("Місяць: ", date.getMonth() + 1); // 10 (додаємо 1, щоб отримати місяць у форматі від 1 до 12)
-    console.log("Рік: ", date.getFullYear()); // 2015
-    const standardDay = date.getDay();
-    const customDay = (standardDay + 6) % 7;
-    // Для передачі значень на C можна створити об'єкт або рядок
+    // Get the current date and time in the "Europe/Kyiv" timezone
+    const kyivTime = DateTime.now().setZone('Europe/Kyiv');
+    
+    // Extracting the date and time components
     const time = {
-        seconds: date.getSeconds(),
-        minutes: date.getMinutes(),
-        hours: date.getHours(),
-        day: date.getDate(),
-        month: date.getMonth() + 1, // Додаємо 1, оскільки JavaScript місяці нумеруються з 0
-        year: date.getFullYear() - 2000,
-        weekDay:customDay
+      seconds: kyivTime.second,
+      minutes: kyivTime.minute,
+      hours: kyivTime.hour,
+      day: kyivTime.day,
+      month: kyivTime.month, // Luxon uses 1-based month by default
+      year: kyivTime.year - 2000,
+      weekDay: (kyivTime.weekday % 7) // Adjusting weekDay from 1-7 to 0-6 (Sunday as 0)
     };
     
-    // Вивід об'єкта для перевірки
-    console.log("Часові параметри для C:", time.weekDay);
+    // Logging the date and time details for verification
+    console.log("Часові параметри для C:", time);
 
-    res.send(`0=${time.seconds}&1=${time.minutes}&2=${time.hours}&3=${time.day}&4=${time.month}&5=${time.year}&6=${time.weekDay}`)
+    // Sending the formatted response
+    res.send(`0=${time.seconds}&1=${time.minutes}&2=${time.hours}&3=${time.day}&4=${time.month}&5=${time.year}&6=${time.weekDay}`);
   } catch (error) {
     console.log(error);
+    res.status(500).send('Internal Server Error');
   }
-})
-
+});
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });
