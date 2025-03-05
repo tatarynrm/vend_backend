@@ -4,7 +4,6 @@ const axios = require("axios");
 
 const sendMsgAddLitr = async (req, res) => {
   const { data } = req.body;
-  console.log(data);
   try {
     const queryParams = {
       grant_type: "password",
@@ -12,7 +11,7 @@ const sendMsgAddLitr = async (req, res) => {
       password: "!0250910zXcDanil",
     };
     const headers = {
-      Authorization: "Basic aW50ZXJuYWw6aW50ZXJuYWw=",
+      Authorization: "Basic d2ViYXBwOndlYmFwcA==",
     };
     const token = await axios.post(
       "https://a2p.vodafone.ua/uaa/oauth/token",
@@ -25,29 +24,34 @@ const sendMsgAddLitr = async (req, res) => {
 
     if (token && data) {
       const url =
-        "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v2/communicationMessage/send";
-      const headers = {
+        "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v3/communicationMessage/send";
+      const headers1 = {
         "Content-Type": "application/json",
         Accept: "*/*",
-        Authorization: `bearer ${token.data.access_token}`,
+        Authorization: `Bearer ${token?.data?.access_token}`,
       };
       const data1 = {
-        content: `pin=${+data.smsInfo.machine_pin};addlits=${+data.liters};`,
-        type: "SMS",
-        receiver: [
-          { id: +data.smsInfo.id, phoneNumber: +data.smsInfo.machine_phone },
-        ],
-        sender: { id: "Vend Water" },
-        characteristic: [
-          { name: "DISTRIBUTION.ID", value: 5029972 },
-          { name: "VALIDITY.PERIOD", value: "000000000100000R" },
+        receiver: [data.smsInfo.machine_phone],
+        cascades: [
+          {
+            transport: "SMS",
+            senderId: 6486204,
+            validityPeriod: "1",
+            messageObject: {
+              type: "SMS",
+              smsMessage: {
+                content: `pin=${+data.smsInfo
+                  .machine_pin};addlits=${+data.liters};`,
+              },
+            },
+          },
         ],
       };
 
       const sendLitersData = await axios({
         method: "post",
         url: url,
-        headers: headers,
+        headers: headers1,
         data: data1,
       })
         .then((response) => {
@@ -90,7 +94,7 @@ const sendRestartModule = async (req, res) => {
       password: "!0250910zXcDanil",
     };
     const headers = {
-      Authorization: "Basic aW50ZXJuYWw6aW50ZXJuYWw=",
+      Authorization: "Basic d2ViYXBwOndlYmFwcA==",
     };
     const token = await axios.post(
       "https://a2p.vodafone.ua/uaa/oauth/token",
@@ -103,7 +107,7 @@ const sendRestartModule = async (req, res) => {
 
     if (token && data) {
       const url =
-        "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v2/communicationMessage/send";
+        "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v3/communicationMessage/send";
 
       const headers = {
         "Content-Type": "application/json",
@@ -111,18 +115,21 @@ const sendRestartModule = async (req, res) => {
         Authorization: `bearer ${token.data.access_token}`,
       };
       const data1 = {
-        content: `pin=${+data.smsInfo.machine_pin};reboot;`,
-        type: "SMS",
-        receiver: [
-          { id: +data.smsInfo.id, phoneNumber: +data.smsInfo.machine_phone },
-        ],
-        sender: { id: "Vend Water" },
-        characteristic: [
-          { name: "DISTRIBUTION.ID", value: 5029972 },
-          { name: "VALIDITY.PERIOD", value: "000000000100000R" },
+        receiver: [+data.smsInfo.machine_phone],
+        cascades: [
+          {
+            transport: "SMS",
+            senderId: 6486204,
+            validityPeriod: "1",
+            messageObject: {
+              type: "SMS",
+              smsMessage: {
+                content: `pin=${+data.smsInfo.machine_pin};reboot;`,
+              },
+            },
+          },
         ],
       };
-
       const sendLitersData = await axios({
         method: "post",
         url: url,
@@ -161,8 +168,7 @@ const sendRestartModule = async (req, res) => {
 };
 const sendCollectCash = async (req, res) => {
   const { data } = req.body;
-  console.log(data.priceForLitter);
-  console.log(data);
+
   try {
     const queryParams = {
       grant_type: "password",
@@ -170,7 +176,7 @@ const sendCollectCash = async (req, res) => {
       password: "!0250910zXcDanil",
     };
     const headers = {
-      Authorization: "Basic aW50ZXJuYWw6aW50ZXJuYWw=",
+      Authorization: "Basic d2ViYXBwOndlYmFwcA==",
     };
     const token = await axios.post(
       "https://a2p.vodafone.ua/uaa/oauth/token",
@@ -183,26 +189,30 @@ const sendCollectCash = async (req, res) => {
 
     if (token && data) {
       const url =
-        "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v2/communicationMessage/send";
+        "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v3/communicationMessage/send";
 
       const headers = {
         "Content-Type": "application/json",
         Accept: "*/*",
         Authorization: `bearer ${token.data.access_token}`,
       };
+
       const data1 = {
-        content: `pin=${+data.smsInfo.machine_pin};collect;`,
-        type: "SMS",
-        receiver: [
-          { id: +data.smsInfo.id, phoneNumber: +data.smsInfo.machine_phone },
-        ],
-        sender: { id: "Vend Water" },
-        characteristic: [
-          { name: "DISTRIBUTION.ID", value: 5029972 },
-          { name: "VALIDITY.PERIOD", value: "000000000100000R" },
+        receiver: [+data.smsInfo.machine_phone],
+        cascades: [
+          {
+            transport: "SMS",
+            senderId: 6486204,
+            validityPeriod: "1",
+            messageObject: {
+              type: "SMS",
+              smsMessage: {
+                content: `pin=${+data.smsInfo.machine_pin};collect;`,
+              },
+            },
+          },
         ],
       };
-
       const sendLitersData = await axios({
         method: "post",
         url: url,
@@ -249,7 +259,7 @@ const sendPriceForLitr = async (req, res) => {
       password: "!0250910zXcDanil",
     };
     const headers = {
-      Authorization: "Basic aW50ZXJuYWw6aW50ZXJuYWw=",
+      Authorization: "Basic d2ViYXBwOndlYmFwcA==",
     };
     const token = await axios.post(
       "https://a2p.vodafone.ua/uaa/oauth/token",
@@ -262,27 +272,43 @@ const sendPriceForLitr = async (req, res) => {
 
     if (token && data) {
       const url =
-        "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v2/communicationMessage/send";
+        "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v3/communicationMessage/send";
 
       const headers = {
         "Content-Type": "application/json",
         Accept: "*/*",
         Authorization: `bearer ${token.data.access_token}`,
       };
+      // const data1 = {
+      //   content: `pin=${+data.smsInfo
+      //     .machine_pin};setprice:1=${+data.priceForLiter};`,
+      //   type: "SMS",
+      //   receiver: [
+      //     { id: +data.smsInfo.id, phoneNumber: +data.smsInfo.machine_phone },
+      //   ],
+      //   sender: { id: "Vend Water" },
+      //   characteristic: [
+      //     { name: "DISTRIBUTION.ID", value: 5029972 },
+      //     { name: "VALIDITY.PERIOD", value: "000000000100000R" },
+      //   ],
+      // };
       const data1 = {
-        content: `pin=${+data.smsInfo
+        receiver: [+data.smsInfo.machine_phone],
+        cascades: [
+          {
+            transport: "SMS",
+            senderId: 6486204,
+            validityPeriod: "1",
+            messageObject: {
+              type: "SMS",
+              smsMessage: {
+                content: `pin=${+data.smsInfo
           .machine_pin};setprice:1=${+data.priceForLiter};`,
-        type: "SMS",
-        receiver: [
-          { id: +data.smsInfo.id, phoneNumber: +data.smsInfo.machine_phone },
-        ],
-        sender: { id: "Vend Water" },
-        characteristic: [
-          { name: "DISTRIBUTION.ID", value: 5029972 },
-          { name: "VALIDITY.PERIOD", value: "000000000100000R" },
+              },
+            },
+          },
         ],
       };
-
       const sendLitersData = await axios({
         method: "post",
         url: url,
@@ -329,7 +355,7 @@ const sendGetInfo = async (req, res) => {
       password: "!0250910zXcDanil",
     };
     const headers = {
-      Authorization: "Basic aW50ZXJuYWw6aW50ZXJuYWw=",
+      Authorization: "Basic d2ViYXBwOndlYmFwcA==",
     };
     const token = await axios.post(
       "https://a2p.vodafone.ua/uaa/oauth/token",
@@ -342,26 +368,30 @@ const sendGetInfo = async (req, res) => {
 
     if (token && data) {
       const url =
-        "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v2/communicationMessage/send";
+        "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v3/communicationMessage/send";
 
       const headers = {
         "Content-Type": "application/json",
         Accept: "*/*",
         Authorization: `bearer ${token.data.access_token}`,
       };
+
       const data1 = {
-        content: `pin=${+data.smsInfo.machine_pin};getinfo;`,
-        type: "SMS",
-        receiver: [
-          { id: +data.smsInfo.id, phoneNumber: +data.smsInfo.machine_phone },
-        ],
-        sender: { id: "Vend Water" },
-        characteristic: [
-          { name: "DISTRIBUTION.ID", value: 5029972 },
-          { name: "VALIDITY.PERIOD", value: "000000000100000R" },
+        receiver: [+data.smsInfo.machine_phone],
+        cascades: [
+          {
+            transport: "SMS",
+            senderId: 6486204,
+            validityPeriod: "1",
+            messageObject: {
+              type: "SMS",
+              smsMessage: {
+                content: `pin=${+data.smsInfo.machine_pin};getinfo;`,
+              },
+            },
+          },
         ],
       };
-
       const sendLitersData = await axios({
         method: "post",
         url: url,
@@ -398,8 +428,11 @@ const sendGetInfo = async (req, res) => {
     });
   }
 };
+// DONE change PIN
 const changePin = async (req, res) => {
   const { data } = req.body;
+
+  console.log("PINNN", data?.smsInfo?.machine_pin);
 
   try {
     const queryParams = {
@@ -408,7 +441,7 @@ const changePin = async (req, res) => {
       password: "!0250910zXcDanil",
     };
     const headers = {
-      Authorization: "Basic aW50ZXJuYWw6aW50ZXJuYWw=",
+      Authorization: "Basic d2ViYXBwOndlYmFwcA==",
     };
     const token = await axios.post(
       "https://a2p.vodafone.ua/uaa/oauth/token",
@@ -421,26 +454,31 @@ const changePin = async (req, res) => {
 
     if (token && data) {
       const url =
-        "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v2/communicationMessage/send";
+        "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v3/communicationMessage/send";
 
       const headers = {
         "Content-Type": "application/json",
         Accept: "*/*",
-        Authorization: `bearer ${token.data.access_token}`,
-      };
-      const data1 = {
-        content: `pin=${+data.smsInfo.machine_pin};setpin=${+data.pin};`,
-        type: "SMS",
-        receiver: [
-          { id: +data.smsInfo.id, phoneNumber: +data.smsInfo.machine_phone },
-        ],
-        sender: { id: "Vend Water" },
-        characteristic: [
-          { name: "DISTRIBUTION.ID", value: 5029972 },
-          { name: "VALIDITY.PERIOD", value: "000000000100000R" },
-        ],
+        Authorization: `bearer ${token?.data?.access_token}`,
       };
 
+      const data1 = {
+        receiver: [+data.smsInfo.machine_phone],
+        cascades: [
+          {
+            transport: "SMS",
+            senderId: 6486204,
+            validityPeriod: "1",
+            messageObject: {
+              type: "SMS",
+              smsMessage: {
+                content: `pin=${+data?.smsInfo
+                  ?.machine_pin};setpin=${+data?.pin};`,
+              },
+            },
+          },
+        ],
+      };
       const sendLitersData = await axios({
         method: "post",
         url: url,
@@ -465,7 +503,11 @@ const changePin = async (req, res) => {
           res.status(200).json(response.data);
           console.log(data);
           db.query(
-            `update  water_machine set machine_pin = ${+data.pin}
+            `update  water_machine set machine_pin = ${
+              +data?.pin !== NaN || +data?.pin !== undefined || +data?.pin
+                ? +data?.pin
+                : 1111
+            }
              where machine_id =${+data.smsInfo.machine_id}
             `
           );
@@ -483,6 +525,8 @@ const changePin = async (req, res) => {
     });
   }
 };
+
+// DONE change PIN
 const changeNumber = async (req, res) => {
   const { data } = req.body;
   console.log(data);
@@ -504,64 +548,62 @@ const changeNumber = async (req, res) => {
     //   }
     // );
 
+    // const url =
+    //   "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v2/communicationMessage/send";
 
-      // const url =
-      //   "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v2/communicationMessage/send";
+    // const headers = {
+    //   "Content-Type": "application/json",
+    //   Accept: "*/*",
+    //   Authorization: `bearer ${token.data.access_token}`,
+    // };
+    // const data1 = {
+    //   content: `pin=${+data.smsInfo
+    //     .machine_pin};settelnum:1=${+data.newNumber};`,
+    //   type: "SMS",
+    //   receiver: [
+    //     { id: +data.smsInfo.id, phoneNumber: +data.smsInfo.machine_phone },
+    //   ],
+    //   sender: { id: "Vend Water" },
+    //   characteristic: [
+    //     { name: "DISTRIBUTION.ID", value: 5029972 },
+    //     { name: "VALIDITY.PERIOD", value: "000000000100000R" },
+    //   ],
+    // };
 
-      // const headers = {
-      //   "Content-Type": "application/json",
-      //   Accept: "*/*",
-      //   Authorization: `bearer ${token.data.access_token}`,
-      // };
-      // const data1 = {
-      //   content: `pin=${+data.smsInfo
-      //     .machine_pin};settelnum:1=${+data.newNumber};`,
-      //   type: "SMS",
-      //   receiver: [
-      //     { id: +data.smsInfo.id, phoneNumber: +data.smsInfo.machine_phone },
-      //   ],
-      //   sender: { id: "Vend Water" },
-      //   characteristic: [
-      //     { name: "DISTRIBUTION.ID", value: 5029972 },
-      //     { name: "VALIDITY.PERIOD", value: "000000000100000R" },
-      //   ],
-      // };
+    // const sendLitersData = await axios({
+    //   method: "post",
+    //   url: url,
+    //   headers: headers,
+    //   // data: data1,
+    // })
+    // .then((response) => {
+    //   db.query(
+    //     `
+    //              INSERT INTO sms_status (company_id,status,status_id,status_name)
+    //              values (${+data.userData
+    //                .company_id},'${"ACCEPTED"}',${7},'${"Заміна номера модуля"}')
+    //              `,
+    //     (error, result) => {
+    //       if (error) {
+    //         console.error("Error executing query", error);
+    //       } else {
+    //         console.log("Query result:", result.rows);
+    //       }
+    //     }
+    //   );
 
-      // const sendLitersData = await axios({
-      //   method: "post",
-      //   url: url,
-      //   headers: headers,
-      //   // data: data1,
-      // })
-        // .then((response) => {
-        //   db.query(
-        //     `
-        //              INSERT INTO sms_status (company_id,status,status_id,status_name)
-        //              values (${+data.userData
-        //                .company_id},'${"ACCEPTED"}',${7},'${"Заміна номера модуля"}')
-        //              `,
-        //     (error, result) => {
-        //       if (error) {
-        //         console.error("Error executing query", error);
-        //       } else {
-        //         console.log("Query result:", result.rows);
-        //       }
-        //     }
-        //   );
-         
-        const result = await   db.query(
-            `update water_machine set machine_phone = ${+data.newNumber}
+    const result = await db.query(
+      `update water_machine set machine_phone = ${+data.newNumber}
              where machine_id =${+data.smsInfo.machine_id}
             `
-          );
+    );
 
-          console.log("Response:", result.rows);
-          res.json(result)
-        // })
-        // .catch((error) => {
-        //   console.error("Error:", error.message);
-        // });
-   
+    console.log("Response:", result.rows);
+    res.json(result);
+    // })
+    // .catch((error) => {
+    //   console.error("Error:", error.message);
+    // });
   } catch (error) {
     console.log(error);
     res.status(400).json({
@@ -571,7 +613,8 @@ const changeNumber = async (req, res) => {
 };
 const changeToken = async (req, res) => {
   const { data } = req.body;
-  console.log('DATA!!!!!!!!!!',data);
+  console.log(data);
+
   try {
     const queryParams = {
       grant_type: "password",
@@ -579,7 +622,7 @@ const changeToken = async (req, res) => {
       password: "!0250910zXcDanil",
     };
     const headers = {
-      Authorization: "Basic aW50ZXJuYWw6aW50ZXJuYWw=",
+      Authorization: "Basic d2ViYXBwOndlYmFwcA==",
     };
     const token = await axios.post(
       "https://a2p.vodafone.ua/uaa/oauth/token",
@@ -592,33 +635,40 @@ const changeToken = async (req, res) => {
 
     if (token && data) {
       const url =
-        "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v2/communicationMessage/send";
-
-      const headers = {
+        "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v3/communicationMessage/send";
+      const headers1 = {
         "Content-Type": "application/json",
         Accept: "*/*",
-        Authorization: `bearer ${token.data.access_token}`,
-      };
-      const data1 = {
-        content: `pin=${+data.smsInfo.machine_pin};settok=${data.newToken};`,
-        type: "SMS",
-        receiver: [
-          { id: +data.smsInfo.id, phoneNumber: +data.smsInfo.machine_phone },
-        ],
-        sender: { id: "Vend Water" },
-        characteristic: [
-          { name: "DISTRIBUTION.ID", value: 5029972 },
-          { name: "VALIDITY.PERIOD", value: "000000000100000R" },
-        ],
+        Authorization: `Bearer ${token?.data?.access_token}`,
       };
 
-      const sendLitersData = await axios({
-        method: "post",
+      const data1 = {
+        receiver: [+data.smsInfo.machine_pin],
+        cascades: [
+          {
+            transport: "SMS",
+            senderId: 6486204,
+            validityPeriod: "1",
+            messageObject: {
+              type: "SMS",
+              smsMessage: {
+                content: `pin=${+data.smsInfo.machine_pin};settok=${
+                  data?.newToken
+                };`,
+              },
+            },
+          },
+        ],
+      };
+      const sendLitersData1 = await axios({
+        method: "POST",
         url: url,
-        headers: headers,
+        headers: headers1,
         data: data1,
       })
         .then((response) => {
+          console.log("RESPONSE", response);
+
           db.query(
             `
                      INSERT INTO sms_status (company_id,status,status_id,status_name)
@@ -635,11 +685,13 @@ const changeToken = async (req, res) => {
           );
           res.status(200).json(response.data);
           db.query(
-            `update water_machine set machine_token = '${data.newToken}' where machine_id = ${+data.smsInfo.machine_id}
+            `update water_machine set machine_token = '${
+              data.newToken
+            }' where machine_id = ${+data.smsInfo.machine_id}
             `
           );
 
-          console.log("Response:-------", response.data);
+          // console.log("Response:-------", response.data);
         })
         .catch((error) => {
           console.error("Error:", error.message);
@@ -682,7 +734,9 @@ const changeAddress = async (req, res) => {
         Authorization: `bearer ${token.data.access_token}`,
       };
       const data1 = {
-        content: `pin=${+data.smsInfo.machine_pin};setantaddr=${data.newAnthillAddress};`,
+        content: `pin=${+data.smsInfo.machine_pin};setantaddr=${
+          data.newAnthillAddress
+        };`,
         type: "SMS",
         receiver: [
           { id: +data.smsInfo.id, phoneNumber: +data.smsInfo.machine_phone },
@@ -738,7 +792,7 @@ const changeAddress = async (req, res) => {
 };
 const changeServiceNumber = async (req, res) => {
   const { data } = req.body;
-console.log(data);
+  console.log(data);
   try {
     const queryParams = {
       grant_type: "password",
@@ -746,7 +800,7 @@ console.log(data);
       password: "!0250910zXcDanil",
     };
     const headers = {
-      Authorization: "Basic aW50ZXJuYWw6aW50ZXJuYWw=",
+      Authorization: "Basic d2ViYXBwOndlYmFwcA==",
     };
     const token = await axios.post(
       "https://a2p.vodafone.ua/uaa/oauth/token",
@@ -759,26 +813,32 @@ console.log(data);
 
     if (token && data) {
       const url =
-        "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v2/communicationMessage/send";
+        "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v3/communicationMessage/send";
 
       const headers = {
         "Content-Type": "application/json",
         Accept: "*/*",
         Authorization: `bearer ${token.data.access_token}`,
       };
+
       const data1 = {
-        content: `pin=${+data.smsInfo.machine_pin};settelnum:1=${data.serviceNumber};`,
-        type: "SMS",
-        receiver: [
-          { id: +data.smsInfo.id, phoneNumber: +data.smsInfo.machine_phone },
-        ],
-        sender: { id: "Vend Water" },
-        characteristic: [
-          { name: "DISTRIBUTION.ID", value: 5029972 },
-          { name: "VALIDITY.PERIOD", value: "000000000100000R" },
+        receiver: [+data.smsInfo.machine_phone],
+        cascades: [
+          {
+            transport: "SMS",
+            senderId: 6486204,
+            validityPeriod: "1",
+            messageObject: {
+              type: "SMS",
+              smsMessage: {
+                content: `pin=${+data.smsInfo.machine_pin};settelnum:1=${
+                  data.serviceNumber
+                };`,
+              },
+            },
+          },
         ],
       };
-
       const sendLitersData = await axios({
         method: "post",
         url: url,
@@ -832,5 +892,5 @@ module.exports = {
   changeNumber,
   changeToken,
   changeAddress,
-  changeServiceNumber
+  changeServiceNumber,
 };

@@ -131,6 +131,10 @@ app.get('/current-time', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
+
+
+
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });
