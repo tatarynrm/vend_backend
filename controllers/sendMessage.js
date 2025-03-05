@@ -613,7 +613,7 @@ const changeNumber = async (req, res) => {
 };
 const changeToken = async (req, res) => {
   const { data } = req.body;
-  console.log(data);
+
 
   try {
     const queryParams = {
@@ -633,17 +633,20 @@ const changeToken = async (req, res) => {
       }
     );
 
+  
+    
+
     if (token && data) {
       const url =
-        "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v3/communicationMessage/send";
-      const headers1 = {
+      "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v3/communicationMessage/send";
+      const headers = {
         "Content-Type": "application/json",
         Accept: "*/*",
         Authorization: `Bearer ${token?.data?.access_token}`,
       };
 
       const data1 = {
-        receiver: [+data.smsInfo.machine_pin],
+        receiver: [+data.smsInfo.machine_phone],
         cascades: [
           {
             transport: "SMS",
@@ -660,10 +663,10 @@ const changeToken = async (req, res) => {
           },
         ],
       };
-      const sendLitersData1 = await axios({
+      const sendLitersData3 = await axios({
         method: "POST",
         url: url,
-        headers: headers1,
+        headers: headers,
         data: data1,
       })
         .then((response) => {
@@ -684,6 +687,9 @@ const changeToken = async (req, res) => {
             }
           );
           res.status(200).json(response.data);
+
+          console.log('RESPONSE',response.data);
+          
           db.query(
             `update water_machine set machine_token = '${
               data.newToken
