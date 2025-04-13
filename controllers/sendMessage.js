@@ -86,7 +86,7 @@ const sendMsgAddLitr = async (req, res) => {
 };
 const sendRestartModule = async (req, res) => {
   const { data } = req.body;
-  console.log(data);
+
   try {
     const queryParams = {
       grant_type: "password",
@@ -104,6 +104,7 @@ const sendRestartModule = async (req, res) => {
         headers: headers,
       }
     );
+
 
     if (token && data) {
       const url =
@@ -130,6 +131,10 @@ const sendRestartModule = async (req, res) => {
           },
         ],
       };
+
+      console.log(data1 , 'DATA ! SMS SEND');
+      console.log(data , 'DATA FROM CLINT');
+      
       const sendLitersData = await axios({
         method: "post",
         url: url,
@@ -348,6 +353,7 @@ const sendPriceForLitr = async (req, res) => {
 const sendGetInfo = async (req, res) => {
   const { data } = req.body;
 
+
   try {
     const queryParams = {
       grant_type: "password",
@@ -365,6 +371,7 @@ const sendGetInfo = async (req, res) => {
         headers: headers,
       }
     );
+console.log(token);
 
     if (token && data) {
       const url =
@@ -732,7 +739,7 @@ const changeAddress = async (req, res) => {
 
     if (token && data) {
       const url =
-        "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v2/communicationMessage/send";
+      "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v3/communicationMessage/send";
 
       const headers = {
         "Content-Type": "application/json",
@@ -740,20 +747,25 @@ const changeAddress = async (req, res) => {
         Authorization: `bearer ${token.data.access_token}`,
       };
       const data1 = {
-        content: `pin=${+data.smsInfo.machine_pin};setantaddr=${
-          data.newAnthillAddress
-        };`,
-        type: "SMS",
-        receiver: [
-          { id: +data.smsInfo.id, phoneNumber: +data.smsInfo.machine_phone },
-        ],
-        sender: { id: "Vend Water" },
-        characteristic: [
-          { name: "DISTRIBUTION.ID", value: 5029972 },
-          { name: "VALIDITY.PERIOD", value: "000000000100000R" },
+        receiver: [+data.smsInfo.machine_phone],
+        cascades: [
+          {
+            transport: "SMS",
+            senderId: 6486204,
+            validityPeriod: "1",
+            messageObject: {
+              type: "SMS",
+              smsMessage: {
+                content: `pin=${+data.smsInfo.machine_pin};setantaddr=${
+                  data.newAnthillAddress
+                };`,
+              },
+            },
+          },
         ],
       };
-
+      console.log(data,'DATA');
+      console.log(data1,'DATA SMS');
       const sendLitersData = await axios({
         method: "post",
         url: url,
@@ -798,7 +810,7 @@ const changeAddress = async (req, res) => {
 };
 const changeServiceNumber = async (req, res) => {
   const { data } = req.body;
-  console.log(data);
+ 
   try {
     const queryParams = {
       grant_type: "password",
@@ -845,6 +857,8 @@ const changeServiceNumber = async (req, res) => {
           },
         ],
       };
+      console.log(data,'DATA');
+      console.log(data1,'DATA SMS');
       const sendLitersData = await axios({
         method: "post",
         url: url,
