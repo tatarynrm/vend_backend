@@ -1,6 +1,7 @@
 const db = require("../db/db");
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
+const getVodafoneToken = require("../own_functions/getToken");
 const sender = 6762347
 
 const sendMsgAddLitr = async (req, res) => {
@@ -14,22 +15,15 @@ const sendMsgAddLitr = async (req, res) => {
     const headers = {
       Authorization: "Basic d2ViYXBwOndlYmFwcA==",
     };
-    const token = await axios.post(
-      "https://a2p.vodafone.ua/uaa/oauth/token",
-      null,
-      {
-        params: queryParams,
-        headers: headers,
-      }
-    );
+const accessToken = await getVodafoneToken();
 
-    if (token && data) {
+    if (accessToken && data) {
       const url =
         "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v3/communicationMessage/send";
       const headers1 = {
         "Content-Type": "application/json",
         Accept: "*/*",
-        Authorization: `Bearer ${token?.data?.access_token}`,
+        Authorization: `Bearer ${accessToken}`,
       };
       const data1 = {
         receiver: [data.smsInfo.machine_phone],
@@ -97,24 +91,17 @@ const sendRestartModule = async (req, res) => {
     const headers = {
       Authorization: "Basic d2ViYXBwOndlYmFwcA==",
     };
-    const token = await axios.post(
-      "https://a2p.vodafone.ua/uaa/oauth/token",
-      null,
-      {
-        params: queryParams,
-        headers: headers,
-      }
-    );
 
+const accessToken = await getVodafoneToken();
 
-    if (token && data) {
+    if (accessToken && data) {
       const url =
         "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v3/communicationMessage/send";
 
       const headers = {
         "Content-Type": "application/json",
         Accept: "*/*",
-        Authorization: `bearer ${token.data.access_token}`,
+        Authorization: `bearer ${accessToken}`,
       };
       const data1 = {
         receiver: [+data.smsInfo.machine_phone],
@@ -184,23 +171,16 @@ const sendCollectCash = async (req, res) => {
     const headers = {
       Authorization: "Basic d2ViYXBwOndlYmFwcA==",
     };
-    const token = await axios.post(
-      "https://a2p.vodafone.ua/uaa/oauth/token",
-      null,
-      {
-        params: queryParams,
-        headers: headers,
-      }
-    );
+const accessToken = await getVodafoneToken();
 
-    if (token && data) {
+    if (accessToken && data) {
       const url =
         "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v3/communicationMessage/send";
 
       const headers = {
         "Content-Type": "application/json",
         Accept: "*/*",
-        Authorization: `bearer ${token.data.access_token}`,
+        Authorization: `bearer ${accessToken}`,
       };
 
       const data1 = {
@@ -267,23 +247,16 @@ const sendPriceForLitr = async (req, res) => {
     const headers = {
       Authorization: "Basic d2ViYXBwOndlYmFwcA==",
     };
-    const token = await axios.post(
-      "https://a2p.vodafone.ua/uaa/oauth/token",
-      null,
-      {
-        params: queryParams,
-        headers: headers,
-      }
-    );
 
-    if (token && data) {
+const accessToken = await getVodafoneToken();
+    if (accessToken && data) {
       const url =
         "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v3/communicationMessage/send";
 
       const headers = {
         "Content-Type": "application/json",
         Accept: "*/*",
-        Authorization: `bearer ${token.data.access_token}`,
+        Authorization: `bearer ${accessToken}`,
       };
       // const data1 = {
       //   content: `pin=${+data.smsInfo
@@ -364,24 +337,16 @@ const sendGetInfo = async (req, res) => {
     const headers = {
       Authorization: "Basic d2ViYXBwOndlYmFwcA==",
     };
-    const token = await axios.post(
-      "https://a2p.vodafone.ua/uaa/oauth/token",
-      null,
-      {
-        params: queryParams,
-        headers: headers,
-      }
-    );
-console.log(token);
+const accessToken = await getVodafoneToken();
 
-    if (token && data) {
+    if (accessToken && data) {
       const url =
         "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v3/communicationMessage/send";
 
       const headers = {
         "Content-Type": "application/json",
         Accept: "*/*",
-        Authorization: `bearer ${token.data.access_token}`,
+        Authorization: `bearer ${accessToken}`,
       };
 
       const data1 = {
@@ -440,7 +405,6 @@ console.log(token);
 const changePin = async (req, res) => {
   const { data } = req.body;
 
-  console.log("PINNN", data?.smsInfo?.machine_pin);
 
   try {
     const queryParams = {
@@ -451,23 +415,16 @@ const changePin = async (req, res) => {
     const headers = {
       Authorization: "Basic d2ViYXBwOndlYmFwcA==",
     };
-    const token = await axios.post(
-      "https://a2p.vodafone.ua/uaa/oauth/token",
-      null,
-      {
-        params: queryParams,
-        headers: headers,
-      }
-    );
+const accessToken = await getVodafoneToken();
 
-    if (token && data) {
+    if (accessToken && data) {
       const url =
         "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v3/communicationMessage/send";
 
       const headers = {
         "Content-Type": "application/json",
         Accept: "*/*",
-        Authorization: `bearer ${token?.data?.access_token}`,
+        Authorization: `bearer ${accessToken}`,
       };
 
       const data1 = {
@@ -632,25 +589,17 @@ const changeToken = async (req, res) => {
     const headers = {
       Authorization: "Basic d2ViYXBwOndlYmFwcA==",
     };
-    const token = await axios.post(
-      "https://a2p.vodafone.ua/uaa/oauth/token",
-      null,
-      {
-        params: queryParams,
-        headers: headers,
-      }
-    );
-
+const accessToken = await getVodafoneToken();
   
     
 
-    if (token && data) {
+    if (accessToken && data) {
       const url =
       "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v3/communicationMessage/send";
       const headers = {
         "Content-Type": "application/json",
         Accept: "*/*",
-        Authorization: `Bearer ${token?.data?.access_token}`,
+        Authorization: `Bearer ${accessToken}`,
       };
 
       const data1 = {
@@ -729,23 +678,16 @@ const changeAddress = async (req, res) => {
     const headers = {
       Authorization: "Basic aW50ZXJuYWw6aW50ZXJuYWw=",
     };
-    const token = await axios.post(
-      "https://a2p.vodafone.ua/uaa/oauth/token",
-      null,
-      {
-        params: queryParams,
-        headers: headers,
-      }
-    );
+const accessToken = await getVodafoneToken();
 
-    if (token && data) {
+    if (accessToken && data) {
       const url =
       "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v3/communicationMessage/send";
 
       const headers = {
         "Content-Type": "application/json",
         Accept: "*/*",
-        Authorization: `bearer ${token.data.access_token}`,
+        Authorization: `bearer ${accessToken}`,
       };
       const data1 = {
         receiver: [+data.smsInfo.machine_phone],
@@ -821,23 +763,16 @@ const changeServiceNumber = async (req, res) => {
     const headers = {
       Authorization: "Basic d2ViYXBwOndlYmFwcA==",
     };
-    const token = await axios.post(
-      "https://a2p.vodafone.ua/uaa/oauth/token",
-      null,
-      {
-        params: queryParams,
-        headers: headers,
-      }
-    );
+const accessToken = await getVodafoneToken();
 
-    if (token && data) {
+    if (accessToken && data) {
       const url =
         "https://a2p.vodafone.ua/communication-event/api/communicationManagement/v3/communicationMessage/send";
 
       const headers = {
         "Content-Type": "application/json",
         Accept: "*/*",
-        Authorization: `bearer ${token.data.access_token}`,
+        Authorization: `bearer ${accessToken}`,
       };
 
       const data1 = {
