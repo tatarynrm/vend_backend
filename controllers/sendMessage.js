@@ -1,6 +1,7 @@
 const db = require("../db/db");
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
+const sender = 6762347
 
 const sendMsgAddLitr = async (req, res) => {
   const { data } = req.body;
@@ -35,7 +36,7 @@ const sendMsgAddLitr = async (req, res) => {
         cascades: [
           {
             transport: "SMS",
-            senderId: 6486204,
+            senderId: sender,
             validityPeriod: "1",
             messageObject: {
               type: "SMS",
@@ -120,7 +121,7 @@ const sendRestartModule = async (req, res) => {
         cascades: [
           {
             transport: "SMS",
-            senderId: 6486204,
+            senderId: sender,
             validityPeriod: "1",
             messageObject: {
               type: "SMS",
@@ -207,7 +208,7 @@ const sendCollectCash = async (req, res) => {
         cascades: [
           {
             transport: "SMS",
-            senderId: 6486204,
+            senderId: sender,
             validityPeriod: "1",
             messageObject: {
               type: "SMS",
@@ -302,7 +303,7 @@ const sendPriceForLitr = async (req, res) => {
         cascades: [
           {
             transport: "SMS",
-            senderId: 6486204,
+            senderId: sender,
             validityPeriod: "1",
             messageObject: {
               type: "SMS",
@@ -388,7 +389,7 @@ console.log(token);
         cascades: [
           {
             transport: "SMS",
-            senderId: 6486204,
+            senderId: sender,
             validityPeriod: "1",
             messageObject: {
               type: "SMS",
@@ -474,7 +475,7 @@ const changePin = async (req, res) => {
         cascades: [
           {
             transport: "SMS",
-            senderId: 6486204,
+            senderId: sender,
             validityPeriod: "1",
             messageObject: {
               type: "SMS",
@@ -657,7 +658,7 @@ const changeToken = async (req, res) => {
         cascades: [
           {
             transport: "SMS",
-            senderId: 6486204,
+            senderId: sender,
             validityPeriod: "1",
             messageObject: {
               type: "SMS",
@@ -751,7 +752,7 @@ const changeAddress = async (req, res) => {
         cascades: [
           {
             transport: "SMS",
-            senderId: 6486204,
+            senderId: sender,
             validityPeriod: "1",
             messageObject: {
               type: "SMS",
@@ -844,7 +845,7 @@ const changeServiceNumber = async (req, res) => {
         cascades: [
           {
             transport: "SMS",
-            senderId: 6486204,
+            senderId: sender,
             validityPeriod: "1",
             messageObject: {
               type: "SMS",
