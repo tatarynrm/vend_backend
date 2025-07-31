@@ -23,6 +23,7 @@ const { exec } = require('child_process');
 const { testSchedule } = require("./own_functions/shedules.js");
 const { creaeteQRCodeLiqPayDevice, createQRCodeLiqPay } = require("./controllers/liqpay.js");
 const { DateTime } = require('luxon');
+const getKyivstarToken = require("./own_functions/getKyivstarToken.js");
 app.use(express.static(path.join(__dirname, "client/build")));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
@@ -133,7 +134,7 @@ app.get('/current-time', async (req, res) => {
 });
 
 
-
+getKyivstarToken()
 
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
